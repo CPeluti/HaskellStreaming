@@ -1,13 +1,12 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/hiWa6Cqc)
-# Projeto Final - 2023/2
 
-## Protosta
+# Protosta
 
-### O problema
+## O problema
 Atualmente serviços de streaming de música são extremamente populares, seja algo mainstream como o spotify ou algo mais obscuro como o qobuz.
 Com isso, tivemos a ideia de implementar uma API REST que seja capaz tanto de lidar com a parte de renderização quanto a parte de streaming usando Haskell.
 
-### A abordagem
+## A abordagem
 Primeiramente, iremos dividir a API em suas principais funcionalidades:
 1. Streaming de mp3.
 2. Autenticação de usuários
@@ -25,6 +24,7 @@ Para demonstrar o projeto, teremos as seguintes funcionalidades:
 - Reprodução de músicas
 
 Protótipo: TBA.
+# Projeto Final - 2023/2
 
 O propósito do projeto final é implementar um problema de maneira criativa, exercitando as 
 ideias tratadas durante o curso.
