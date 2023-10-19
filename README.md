@@ -12,11 +12,11 @@ Primeiramente, iremos dividir a API em suas principais funcionalidades:
 2. Autenticação de usuários
 3. Rederização da interface
 
-Para resolver a parte 1, iremos utilizar a biblioteca [https://hackage.haskell.org/package/scotty](Scotty), juntamente com conduit/pipes para a leitura em chunks dos arquivos de música.
+Para resolver a parte 1, iremos utilizar a biblioteca [Scotty](https://hackage.haskell.org/package/scotty), juntamente com conduit/pipes para a leitura em chunks dos arquivos de música.
 
-Já para a auteticação dos usuários, será necessário utilizar um banco de dados, que por enquanto, decidimos utilizar sqlite através da plataforma (https://turso.tech/)[Turso], juntamente com alguma biblioteca que forneça uma DSL para utilizar o banco de dados mantendo type safety, como por exemplo (https://github.com/morphismtech/squeal)[squeal].
+Já para a auteticação dos usuários, será necessário utilizar um banco de dados, que por enquanto, decidimos utilizar sqlite através da plataforma (Turso)[https://turso.tech/], juntamente com alguma biblioteca que forneça uma DSL para utilizar o banco de dados mantendo type safety, como por exemplo (squeal)[https://github.com/morphismtech/squeal].
 
-Já para a renderização, iremos utilizar HTMX com (https://hackage.haskell.org/package/blaze-html)]blaze] ou (https://hackage.haskell.org/package/lucid)[lucid].
+Já para a renderização, iremos utilizar HTMX com (https://hackage.haskell.org/package/blaze-html)[blaze] ou (lucid)[https://hackage.haskell.org/package/lucid].
 
 Para demonstrar o projeto, teremos as seguintes funcionalidades:
 - Cadastro e Login
