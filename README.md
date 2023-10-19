@@ -1,6 +1,31 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/hiWa6Cqc)
 # Projeto Final - 2023/2
 
+## Protosta
+
+### O problema
+Atualmente serviços de streaming de música são extremamente populares, seja algo mainstream como o spotify ou algo mais obscuro como o qobuz.
+Com isso, tivemos a ideia de implementar uma API REST que seja capaz tanto de lidar com a parte de renderização quanto a parte de streaming usando Haskell.
+
+### A abordagem
+Primeiramente, iremos dividir a API em suas principais funcionalidades:
+1. Streaming de mp3.
+2. Autenticação de usuários
+3. Rederização da interface
+
+Para resolver a parte 1, iremos utilizar a biblioteca [https://hackage.haskell.org/package/scotty](Scotty), juntamente com conduit/pipes para a leitura em chunks dos arquivos de música.
+
+Já para a auteticação dos usuários, será necessário utilizar um banco de dados, que por enquanto, decidimos utilizar sqlite através da plataforma (https://turso.tech/)[Turso], juntamente com alguma biblioteca que forneça uma DSL para utilizar o banco de dados mantendo type safety, como por exemplo (https://github.com/morphismtech/squeal)[squeal].
+
+Já para a renderização, iremos utilizar HTMX com (https://hackage.haskell.org/package/blaze-html)]blaze] ou (https://hackage.haskell.org/package/lucid)[lucid].
+
+Para demonstrar o projeto, teremos as seguintes funcionalidades:
+- Cadastro e Login
+- Criação de playlists
+- Reprodução de músicas
+
+Protótipo: TBA.
+
 O propósito do projeto final é implementar um problema de maneira criativa, exercitando as 
 ideias tratadas durante o curso.
 
