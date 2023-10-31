@@ -24,12 +24,15 @@ Para demonstrar o projeto, teremos as seguintes funcionalidades:
 - Reprodução de músicas
 
 Protótipo: TBA.
+
+
+## Tamanho da equipe
+Preferencialmente 3 integrantes.
+
 # Projeto Final - 2023/2
 
 O propósito do projeto final é implementar um problema de maneira criativa, exercitando as 
 ideias tratadas durante o curso.
-## Tamanho da equipe
-Preferencialmente 3 integrantes.
 
 ## Primeira tarefa
 
