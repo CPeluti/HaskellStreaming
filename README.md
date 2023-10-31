@@ -28,6 +28,8 @@ Protótipo: TBA.
 
 O propósito do projeto final é implementar um problema de maneira criativa, exercitando as 
 ideias tratadas durante o curso.
+## Tamanho da equipe
+Preferencialmente 3 integrantes.
 
 ## Primeira tarefa
 
