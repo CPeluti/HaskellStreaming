@@ -1,7 +1,7 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/hiWa6Cqc)
 
-# Protosta
-
+# Proposta
+## API de streaming de música
 ## O problema
 Atualmente serviços de streaming de música são extremamente populares, seja algo mainstream como o spotify ou algo mais obscuro como o qobuz.
 Com isso, tivemos a ideia de implementar uma API REST que seja capaz tanto de lidar com a parte de renderização quanto a parte de streaming usando Haskell.
@@ -24,6 +24,11 @@ Para demonstrar o projeto, teremos as seguintes funcionalidades:
 - Reprodução de músicas
 
 Protótipo: TBA.
+
+
+## Tamanho da equipe
+Preferencialmente 3 integrantes.
+
 # Projeto Final - 2023/2
 
 O propósito do projeto final é implementar um problema de maneira criativa, exercitando as 
@@ -127,3 +132,4 @@ A seguir uma lista de projetos feitos por alunos que fizeram o curso em semestre
 - [JIT Compiler](https://github.com/Prof-Edil/projeto-JIT-compiler)
 - [Chess](https://github.com/Prof-Edil/projeto-chess)
 - [Request Parser](https://github.com/Prof-Edil/projeto-request-parser)
+
