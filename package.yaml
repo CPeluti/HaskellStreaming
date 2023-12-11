@@ -28,7 +28,10 @@ dependencies:
 - blaze-html
 - bytestring
 - streaming
+- streaming-bytestring
 - resourcet
+- wai
+- http-types
 
 ghc-options:
 - -Wall
