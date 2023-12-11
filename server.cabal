@@ -1,6 +1,6 @@
 cabal-version: 2.2
 
--- This file has been generated from package.yaml by hpack version 0.35.1.
+-- This file has been generated from package.yaml by hpack version 0.36.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -36,9 +36,12 @@ library
   build-depends:
       base >=4.7 && <5
     , blaze-html
+    , bytestring
     , mtl
     , raw-strings-qq
+    , resourcet
     , scotty
+    , streaming
     , text
   default-language: Haskell2010
 
@@ -55,10 +58,13 @@ executable server-exe
   build-depends:
       base >=4.7 && <5
     , blaze-html
+    , bytestring
     , mtl
     , raw-strings-qq
+    , resourcet
     , scotty
     , server
+    , streaming
     , text
   default-language: Haskell2010
 
@@ -75,9 +81,12 @@ test-suite server-test
   build-depends:
       base >=4.7 && <5
     , blaze-html
+    , bytestring
     , mtl
     , raw-strings-qq
+    , resourcet
     , scotty
     , server
+    , streaming
     , text
   default-language: Haskell2010

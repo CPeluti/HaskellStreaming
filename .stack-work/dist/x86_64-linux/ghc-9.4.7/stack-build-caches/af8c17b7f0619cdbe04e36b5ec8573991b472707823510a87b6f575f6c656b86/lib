@@ -1,0 +1,18 @@
+/home/caio/.ghcup/ghc/9.4.7/lib/ghc-9.4.7/lib/x86_64-linux-ghc-9.4.7/rts-1.0.2/include/ghcversion.h:
+  hash: ee548d48ca5c94d7c7fab127ec07be47b01afa24d6495358aa9ff6cfc8541c81
+/home/caio/projetos/unb/haskell/projeto-final-grupo-2/.stack-work/dist/x86_64-linux/ghc-9.4.7/build/autogen/Paths_server.hs:
+  hash: 7adcb7e616733bb4d6538b00ec96f298c8d8041947c059a45e3d7265f51aaa71
+/home/caio/projetos/unb/haskell/projeto-final-grupo-2/.stack-work/dist/x86_64-linux/ghc-9.4.7/build/autogen/cabal_macros.h:
+  hash: 7bf017afedaf54b4d0b0e620016e279e0dcdeeb2be60ac786329a660da9a909d
+/home/caio/projetos/unb/haskell/projeto-final-grupo-2/CHANGELOG.md:
+  hash: ddaca3fb5b6216bc1a4e8e7a9027b995e4f0c00de5fad1d76460195fb00ee094
+/home/caio/projetos/unb/haskell/projeto-final-grupo-2/README.md:
+  hash: bdcf644b8453111428ad75a14b7cbbfd6f35f7762d659ff57b29895285862641
+/home/caio/projetos/unb/haskell/projeto-final-grupo-2/package.yaml:
+  hash: ad1c1c914b03405c30db815012e2a55dc34ec795a43608f8a77dab3471d3fb36
+/home/caio/projetos/unb/haskell/projeto-final-grupo-2/server.cabal:
+  hash: 797f25f16b58f946206ad8bfe6421b25232bb27b0ef599186e9d6c6bccf2e66a
+/home/caio/projetos/unb/haskell/projeto-final-grupo-2/src/Lib.hs:
+  hash: 9f3602017acf13289a9b8bf2008562ee234bd2236f71c6a01617c58d05dc9b31
+/usr/include/stdc-predef.h:
+  hash: cb08cd5d4cc059a90833ac48a284d25016e8d56ded8ad4cd98d8ac59cc5053f3
