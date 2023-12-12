@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# language DeriveAnyClass #-}
 {-# language ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
 
-module RestApi where
+module RestApi (restApi) where
 
 import           Data.Foldable (for_)
 import           Web.Scotty as Scotty
@@ -16,22 +16,28 @@ import Network.HTTP.Types (status206)
 import Text.Read (readMaybe)
 import           Control.Monad.Trans.Resource
 import           Network.Wai
-import           Streaming                   
+import           Streaming
 import qualified Streaming.Prelude               as S
 import           Data.ByteString.Builder (byteString)
 import           Data.ByteString as B
 import           Streaming.ByteString  as BSS (toChunks, readFile)
 
 
-hxPost content = customAttribute "hx-post" content
-hxSwap content = customAttribute "hx-swap" content
+hxPost :: AttributeValue -> Attribute
+hxPost = customAttribute "hx-post"
+hxSwap :: AttributeValue -> Attribute
+hxSwap = customAttribute "hx-swap"
 
+myButton :: Html
 myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
 
-componentButton id = button $ id
+componentButton :: Html -> Html
+componentButton = button
 
+dbData :: [Integer]
 dbData = [1 .. 4]
 
+fPath :: FilePath
 fPath = "/home/caio/projetos/unb/haskell/projeto-final-grupo-2/app/eBG7P-K-r1Y_160.mp3"
 
 fileSize :: FilePath -> IO Int
@@ -45,7 +51,7 @@ fileSize f = do
 -- fileSize = 5827011
 
 generateStream :: MonadResource m => FilePath -> Stream (Of ByteString) m ()
-generateStream f = toChunks $ BSS.readFile f 
+generateStream f = toChunks $ BSS.readFile f
 
 --TODO: refatorar
 parseRanges :: Maybe T.Text -> [T.Text]
@@ -73,18 +79,17 @@ generateRange :: Int -> Int -> String
 generateRange partial_start partial_end = "bytes " ++ show partial_start ++ "-" ++ show partial_end ++ "/" ++ show (partial_end-partial_start+1)
 
 streamingBD :: Stream (Of ByteString) (ResourceT IO) r -> StreamingBody
-streamingBD s = 
-  streamingBody 
+streamingBD s =
+  streamingBody
   where
-  streamingBody writeBuilder flush =
-    let writer aux = 
-            do liftIO (writeBuilder (byteString aux))
-              -- flushes for every produced bytestring, perhaps not optimal
-               liftIO flush
-     in runResourceT $ void $ S.effects $ S.for s writer
+  streamingBody writeBuilder flush = runResourceT $ void $ S.effects $ S.for s writer
+    where
+    writer aux = do 
+        _ <-liftIO (writeBuilder (byteString aux))
+        liftIO flush
 
 restApi :: IO ()
-restApi = 
+restApi =
   scotty 3000 $ do
     get "/" $
       Scotty.html $ renderHtml $
@@ -96,7 +101,7 @@ restApi =
     post "/clicked" $
       Scotty.html $ renderHtml $
         H.div $
-          for_ (Prelude.map show dbData) $ \(id) ->
+          for_ (Prelude.map show dbData) $ \id ->
             componentButton $ toHtml id
     get "/music" $ do
       start <- parseStart <$> Scotty.header "range"
