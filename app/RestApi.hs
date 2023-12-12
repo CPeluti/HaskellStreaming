@@ -45,11 +45,6 @@ fileSize f = do
   readedFile <-  B.readFile f
   return $ B.length readedFile
 
--- unsafeFSize :: FilePath -> String
--- unsafeFSize f = show $ unsafePerformIO $ fileSize f
-
--- fileSize = 5827011
-
 generateStream :: MonadResource m => FilePath -> Stream (Of ByteString) m ()
 generateStream f = toChunks $ BSS.readFile f
 
@@ -60,6 +55,7 @@ parseRanges Nothing = ["",""]
 
 parseStart :: Maybe T.Text -> T.Text
 parseStart f = Prelude.head $ parseRanges f
+
 parseEnd :: Maybe T.Text -> T.Text
 parseEnd f = Prelude.head $ Prelude.tail $ parseRanges f
 
@@ -75,6 +71,7 @@ parseInt :: String -> Maybe Int
 parseInt s = readMaybe s :: Maybe Int
 --
 
+-- TODO: Refatorar
 generateRange :: Int -> Int -> String
 generateRange partial_start partial_end = "bytes " ++ show partial_start ++ "-" ++ show partial_end ++ "/" ++ show (partial_end-partial_start+1)
 
@@ -87,6 +84,7 @@ streamingBD s =
     writer aux = do 
         _ <-liftIO (writeBuilder (byteString aux))
         liftIO flush
+--
 
 restApi :: IO ()
 restApi =
