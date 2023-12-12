@@ -70,7 +70,7 @@ parseInt s = readMaybe s :: Maybe Int
 --
 
 generateRange :: Int -> Int -> String
-generateRange start end = "bytes " ++ show start ++ "-" ++ show end ++ "/" ++ show (end-start+1)
+generateRange partial_start partial_end = "bytes " ++ show partial_start ++ "-" ++ show partial_end ++ "/" ++ show (partial_end-partial_start+1)
 
 streamingBD :: Stream (Of ByteString) (ResourceT IO) r -> StreamingBody
 streamingBD s = 
