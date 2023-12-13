@@ -44,6 +44,20 @@ packages:
       size: 1721
   original:
     hackage: beam-migrate-0.5.2.1@sha256:1ad12bcf5c6e092b9dd5f2a8c23f62dde07bb9e04198b0f59dc5fac855d18bf8,4924
+- completed:
+    hackage: ihp-hsx-1.1.0@sha256:d72b1bba5503dc75bbf281d20fa53544618bb9d9e789083e5d26e06d00675743,2620
+    pantry-tree:
+      sha256: f779fc429986f67a82198117b5878eac453f6e517e3ae4f8fa2bdee8c7c4e7c2
+      size: 574
+  original:
+    hackage: ihp-hsx-1.1.0
+- completed:
+    hackage: megaparsec-9.2.2@sha256:c306a135ec25d91d252032c6128f03598a00e87ea12fcf5fc4878fdffc75c768,3219
+    pantry-tree:
+      sha256: db9715d6910e64d3bbfce69895042a66fcdcd64a54805563834bf0821562b74f
+      size: 1518
+  original:
+    hackage: megaparsec-9.2.2
 snapshots:
 - completed:
     sha256: 350737ef1c4c748f4c7ff56b6e74f2f6d15039a2f148662a8ec1aded016b80d0

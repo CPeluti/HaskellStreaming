@@ -1,6 +1,6 @@
 cabal-version: 2.2
 
--- This file has been generated from package.yaml by hpack version 0.36.0.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -41,6 +41,7 @@ library
     , blaze-html
     , bytestring
     , http-types
+    , ihp-hsx
     , mtl
     , raw-strings-qq
     , resourcet
@@ -72,6 +73,7 @@ executable server-exe
     , blaze-html
     , bytestring
     , http-types
+    , ihp-hsx
     , mtl
     , raw-strings-qq
     , resourcet
@@ -103,6 +105,7 @@ test-suite server-test
     , blaze-html
     , bytestring
     , http-types
+    , ihp-hsx
     , mtl
     , raw-strings-qq
     , resourcet

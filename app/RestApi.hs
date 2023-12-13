@@ -1,26 +1,32 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
 
 module RestApi (restApi) where
 
-import           Data.Foldable (for_)
-import           Web.Scotty as Scotty
-import           Text.Blaze.Html.Renderer.Text (renderHtml)
-import           Text.Blaze.Html5 as H
-import           Text.Blaze.Html5.Attributes as A
+import            Data.Foldable (for_)
 
-import qualified Data.Text.Lazy as T
+import            IHP.HSX.QQ 
+import            IHP.HSX.ConvertibleStrings () 
+import            IHP.HSX.ToHtml () 
 
-import Network.HTTP.Types (status206)
-import Text.Read (readMaybe)
-import           Control.Monad.Trans.Resource
-import           Network.Wai
-import           Streaming
-import qualified Streaming.Prelude               as S
-import           Data.ByteString.Builder (byteString)
-import           Data.ByteString as B
-import           Streaming.ByteString  as BSS (toChunks, readFile)
+import            Web.Scotty as Scotty
+import            Text.Blaze.Html.Renderer.Text (renderHtml)
+import            Text.Blaze.Html5 as H
+import            Text.Blaze.Html5.Attributes as A
+
+import qualified  Data.Text.Lazy as T
+
+import            Network.HTTP.Types (status206)
+import            Text.Read (readMaybe)
+import            Control.Monad.Trans.Resource
+import            Network.Wai
+import            Streaming
+import qualified  Streaming.Prelude               as S
+import            Data.ByteString.Builder (byteString)
+import            Data.ByteString as B
+import            Streaming.ByteString  as BSS (toChunks, readFile)
 
 
 hxPost :: AttributeValue -> Attribute
@@ -31,6 +37,13 @@ hxSwap = customAttribute "hx-swap"
 myButton :: Html
 myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
 
+audioComponent = [hsx|
+  <audio controls>
+    <source src="horse.ogg" type="audio/ogg">
+    <source src="horse.mp3" type="audio/mpeg">
+    Your browser does not support the audio tag.
+  </audio>  
+|]
 componentButton :: Html -> Html
 componentButton = button
 
@@ -38,7 +51,7 @@ dbData :: [Integer]
 dbData = [1 .. 4]
 
 fPath :: FilePath
-fPath = "/home/caio/projetos/unb/haskell/projeto-final-grupo-2/app/eBG7P-K-r1Y_160.mp3"
+fPath = "/home/caio/projetos/unb/projeto-final-grupo-2/app/eBG7P-K-r1Y_160.mp3"
 
 fileSize :: FilePath -> IO Int
 fileSize f = do
@@ -101,6 +114,12 @@ restApi =
         H.div $
           for_ (Prelude.map show dbData) $ \id ->
             componentButton $ toHtml id
+    get "/player" $
+      Scotty.html $ renderHtml $
+        H.div $
+          audioComponent
+          
+          
     get "/music" $ do
       start <- parseStart <$> Scotty.header "range"
       end <- parseEnd <$> Scotty.header "range"

@@ -86,6 +86,6 @@ initializeTables = bracket (open "haspotifaskell.db") close $ \conn ->
         VerificationFailed _  -> createSchema migrationBackend appDb
         VerificationSucceeded -> pure ()
 
-createUser = bracket (open "haspotifaskell.db") close $ \conn ->
-    runBeamSqlite conn $ do
-        insert (users appDb) $ insertValues [User "p@teste.com" "arst" "tsra" "2134"]
+--createUser = bracket (open "haspotifaskell.db") close $ \conn ->
+--    runBeamSqlite conn $ do----
+--    --      insert (users appDb) $ insertValues [User "p@teste.com" "arst" "tsra" "2134"]
