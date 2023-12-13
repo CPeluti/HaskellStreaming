@@ -40,7 +40,14 @@ packages:
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
-# extra-deps: []
+extra-deps:
+  - git: https://github.com/tathougies/beam.git
+    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
+    subdirs:
+      - beam-core
+      - beam-sqlite
+  - sqlite-simple-0.4.18.2
+  - beam-migrate-0.5.2.1@sha256:1ad12bcf5c6e092b9dd5f2a8c23f62dde07bb9e04198b0f59dc5fac855d18bf8,4924
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

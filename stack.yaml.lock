@@ -3,7 +3,47 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
+    git: https://github.com/tathougies/beam.git
+    name: beam-core
+    pantry-tree:
+      sha256: c56d0ac5021efa997c2ddfc95dd9f88e30ac1fea08eddd7922316cc2f050b38d
+      size: 2705
+    subdir: beam-core
+    version: 0.10.1.0
+  original:
+    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
+    git: https://github.com/tathougies/beam.git
+    subdir: beam-core
+- completed:
+    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
+    git: https://github.com/tathougies/beam.git
+    name: beam-sqlite
+    pantry-tree:
+      sha256: 2e01d08b93f6160ff32f8d5ed978dce113ed6cd4eca99a6f587946b8b1b873ba
+      size: 1229
+    subdir: beam-sqlite
+    version: 0.5.3.0
+  original:
+    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
+    git: https://github.com/tathougies/beam.git
+    subdir: beam-sqlite
+- completed:
+    hackage: sqlite-simple-0.4.18.2@sha256:dda1643e723591c880dda8eeba73e93502cfa775078a79da55b5efec4c52ff66,3028
+    pantry-tree:
+      sha256: 64443740f279b344aecb3389ec8f69ea04d171916a9ed23f8fa529dd3ae75540
+      size: 1930
+  original:
+    hackage: sqlite-simple-0.4.18.2
+- completed:
+    hackage: beam-migrate-0.5.2.1@sha256:1ad12bcf5c6e092b9dd5f2a8c23f62dde07bb9e04198b0f59dc5fac855d18bf8,4924
+    pantry-tree:
+      sha256: cc5024fae77beeca8c7e24bc00f1e04474cfc23461b41d2cd10ddcce52f764ba
+      size: 1721
+  original:
+    hackage: beam-migrate-0.5.2.1@sha256:1ad12bcf5c6e092b9dd5f2a8c23f62dde07bb9e04198b0f59dc5fac855d18bf8,4924
 snapshots:
 - completed:
     sha256: 350737ef1c4c748f4c7ff56b6e74f2f6d15039a2f148662a8ec1aded016b80d0

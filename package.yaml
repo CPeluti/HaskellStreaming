@@ -32,6 +32,11 @@ dependencies:
 - resourcet
 - wai
 - http-types
+- beam-core
+- beam-sqlite
+- beam-migrate
+- sqlite-simple
+- time
 
 ghc-options:
 - -Wall

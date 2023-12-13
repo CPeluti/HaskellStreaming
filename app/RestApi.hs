@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# language ScopedTypeVariables #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
 
 module RestApi (restApi) where
