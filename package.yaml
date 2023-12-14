@@ -38,6 +38,7 @@ dependencies:
 - beam-migrate
 - sqlite-simple
 - time
+- directory
 
 ghc-options:
 - -Wall

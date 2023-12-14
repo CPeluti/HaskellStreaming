@@ -27,6 +27,7 @@ import qualified  Streaming.Prelude               as S
 import            Data.ByteString.Builder (byteString)
 import            Data.ByteString as B
 import            Streaming.ByteString  as BSS (toChunks, readFile)
+import            System.Directory (getCurrentDirectory)
 
 
 hxPost :: AttributeValue -> Attribute
@@ -37,25 +38,34 @@ hxSwap = customAttribute "hx-swap"
 myButton :: Html
 myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
 
-audioComponent = [hsx|
-  <audio controls>
-    <source src="horse.ogg" type="audio/ogg">
-    <source src="horse.mp3" type="audio/mpeg">
-    Your browser does not support the audio tag.
-  </audio>  
-|]
+-- audioComponent = [hsx|
+--   <audio controls>
+--     <source src="horse.ogg" type="audio/ogg">
+--     <source src="horse.mp3" type="audio/mpeg">
+--     Your browser does not support the audio tag.
+--   </audio>  
+-- |]
+
 componentButton :: Html -> Html
 componentButton = button
 
 dbData :: [Integer]
 dbData = [1 .. 4]
 
-fPath :: FilePath
-fPath = "/home/caio/projetos/unb/projeto-final-grupo-2/app/eBG7P-K-r1Y_160.mp3"
+fPathRelative :: FilePath
+-- fPathRelative = "virtual_insanity_jamiroquai.mp3"
+fPathRelative = "src/eBG7P-K-r1Y_160.mp3"
+
+-- Function to get the absolute path
+getAbsolutePath :: FilePath -> IO FilePath
+getAbsolutePath anyRelativePath = do
+    currentDir <- getCurrentDirectory
+    return (currentDir ++ "/" ++ anyRelativePath)
+
 
 fileSize :: FilePath -> IO Int
 fileSize f = do
-  readedFile <-  B.readFile f
+  readedFile <- B.readFile f
   return $ B.length readedFile
 
 generateStream :: MonadResource m => FilePath -> Stream (Of ByteString) m ()
@@ -114,19 +124,20 @@ restApi =
         H.div $
           for_ (Prelude.map show dbData) $ \id ->
             componentButton $ toHtml id
-    get "/player" $
-      Scotty.html $ renderHtml $
-        H.div $
-          audioComponent
+    -- get "/player" $
+    --   Scotty.html $ renderHtml $
+    --     H.div $
+    --       audioComponent
           
           
     get "/music" $ do
       start <- parseStart <$> Scotty.header "range"
       end <- parseEnd <$> Scotty.header "range"
-      fSize <- liftIO $ fileSize fPath
+      absolutePath <- liftIO $ getAbsolutePath fPathRelative
+      fSize <- liftIO $ fileSize absolutePath
       -- start <- 
       Scotty.status status206
       Scotty.setHeader "Content-Type" "audio/mpeg"
       Scotty.setHeader "Content-Length" (T.pack $ show fSize)
       Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack start)) (checkEnd (parseInt (T.unpack end)) fSize))
-      Scotty.stream $ streamingBD $ generateStream fPath
+      Scotty.stream $ streamingBD $ generateStream absolutePath
