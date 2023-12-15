@@ -39,6 +39,7 @@ dependencies:
 - sqlite-simple
 - time
 - directory
+- wai-middleware-static
 
 ghc-options:
 - -Wall
