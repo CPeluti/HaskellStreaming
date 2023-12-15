@@ -28,7 +28,8 @@ import            Data.ByteString.Builder (byteString)
 import            Data.ByteString as B
 import            Streaming.ByteString  as BSS (toChunks, readFile)
 import            System.Directory (getCurrentDirectory)
-
+import            Views (loginPage)
+import            Network.Wai.Middleware.Static (static)
 
 hxPost :: AttributeValue -> Attribute
 hxPost = customAttribute "hx-post"
@@ -112,19 +113,27 @@ streamingBD s =
 restApi :: IO ()
 restApi =
   scotty 3000 $ do
+    middleware $ static
     get "/" $
       Scotty.html $ renderHtml $
         H.html $ do
           H.head $
             H.script ! src "https://unpkg.com/htmx.org@1.9.6" $ H.span ""
           H.body $
-            myButton
+            -- myButton
+            loginPage
     post "/clicked" $
       Scotty.html $ renderHtml $
         H.div $
           for_ (Prelude.map show dbData) $ \id ->
             componentButton $ toHtml id
-    -- get "/player" $
+    post "/login" $ do
+        username <- Scotty.param "username"
+        password <- Scotty.param "password"
+        liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
+         -- TODO: implement authentication
+        Scotty.redirect "/music"
+         -- get "/player" $
     --   Scotty.html $ renderHtml $
     --     H.div $
     --       audioComponent
