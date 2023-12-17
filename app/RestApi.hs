@@ -47,6 +47,25 @@ myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
 --   </audio>  
 -- |]
 
+baseHtml bodyContent= [hsx|
+  <html>
+    <head>
+      <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <style type="text/tailwindcss">
+        @layer utilities {
+          .content-auto {
+            content-visibility: auto;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      {bodyContent}
+    </body>
+  </html>
+|]
+
 componentButton :: Html -> Html
 componentButton = button
 
@@ -115,13 +134,7 @@ restApi =
   scotty 3000 $ do
     middleware $ static
     get "/" $
-      Scotty.html $ renderHtml $
-        H.html $ do
-          H.head $
-            H.script ! src "https://unpkg.com/htmx.org@1.9.6" $ H.span ""
-          H.body $
-            -- myButton
-            loginPage
+      Scotty.html $ renderHtml $ baseHtml loginPage
     post "/clicked" $
       Scotty.html $ renderHtml $
         H.div $

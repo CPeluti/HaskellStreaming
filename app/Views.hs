@@ -11,7 +11,7 @@ import Text.Blaze.Html5.Attributes as A
 
 -- Login Page
 loginPage :: Html
-loginPage = [hsx|
+loginPage classes = [hsx|
     <html>
         <head>
             <title>Login</title>
@@ -28,7 +28,7 @@ loginPage = [hsx|
                         <input type="password" id="password" name="password" placeholder="Password" required>
                     </div>
                     <div class="button-container">
-                        <button class="login-button" type="submit">Login</button>
+                        <button class="bg-violet-400 hover:bg-green-500 border-none text-white font-bold" type="submit">Login</button>
                     </div>
                 </form>
             </div>
