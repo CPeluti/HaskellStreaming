@@ -1,5 +1,5 @@
 {-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE TypeSynonymInstances #-}
+-- {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE GADTs #-}
@@ -7,7 +7,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE TypeApplications #-}
+-- {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -24,9 +24,10 @@ import              Control.Exception
 import              Data.ByteString
 import              Data.Time.LocalTime
 import              Data.Int
-import              Data.Eq
+-- import              Data.Eq
 import              Data.Text (Text)
 
+db :: String
 db = ""
 
 -- Generate DB
@@ -77,13 +78,13 @@ data AppDb f = AppDb
     } deriving (Generic, Database be)
 --
 
-appDb :: CheckedDatabaseSettings Sqlite AppDb
-appDb = defaultMigratableDbSettings
+_appDb :: CheckedDatabaseSettings Sqlite AppDb
+_appDb = defaultMigratableDbSettings
 
-initializeTables :: IO ()
-initializeTables = bracket (open "haspotifaskell.db") close $ \conn ->
-    runBeamSqlite conn $ verifySchema migrationBackend appDb >>= \case
-        VerificationFailed _  -> createSchema migrationBackend appDb
+_initializeTables :: IO ()
+_initializeTables = bracket (open "haspotifaskell.db") close $ \conn ->
+    runBeamSqlite conn $ verifySchema migrationBackend _appDb >>= \case
+        VerificationFailed _  -> createSchema migrationBackend _appDb
         VerificationSucceeded -> pure ()
 
 --createUser = bracket (open "haspotifaskell.db") close $ \conn ->
