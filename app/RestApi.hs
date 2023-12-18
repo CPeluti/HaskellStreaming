@@ -28,7 +28,7 @@ import            Data.ByteString.Builder (byteString)
 import            Data.ByteString as B
 import            Streaming.ByteString  as BSS (toChunks, readFile)
 import            System.Directory (getCurrentDirectory)
-import            Views (loginPage)
+import            Views.Pages (loginPage)
 import            Network.Wai.Middleware.Static (static)
 
 -- hxPost :: AttributeValue -> Attribute

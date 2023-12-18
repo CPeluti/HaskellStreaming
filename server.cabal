@@ -61,7 +61,9 @@ executable server-exe
   other-modules:
       Database
       RestApi
-      Views
+      Views.Common
+      Views.Layouts
+      Views.Pages
       Paths_server
   autogen-modules:
       Paths_server
