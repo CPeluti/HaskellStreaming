@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 
-module Views.Common (inputField, loginButton) where
+module Views.Common (inputField, button, playButton) where
 
 import IHP.HSX.QQ (hsx)
 import qualified Text.Blaze.Html as Html
@@ -15,13 +15,21 @@ inputField fieldType name placeholder = [hsx|
     </div>
 |]
 
--- Login button component
-loginButton :: Html.Html
-loginButton = [hsx|
-    <div>
-        <button class="w-full p-4 bg-purple-500 text-white rounded focus:outline-none focus:shadow-outline hover:bg-green-600 transition-colors" 
-                type="submit">
-            Login
-        </button>
-    </div>
+-- Generic button component
+button :: String -> String -> Html.Html
+button fieldType label = [hsx|
+    <button class="w-full p-4 bg-purple-500 text-white rounded focus:outline-none focus:shadow-outline hover:bg-green-600 transition-colors" 
+            type={fieldType}>
+        {label}
+    </button>
+|]
+
+-- Play button component
+playButton :: Html.Html
+playButton = [hsx|
+    <button class="bg-transparent border border-white text-white p-2 rounded-full focus:outline-none focus:border-gray-500 hover:bg-white hover:text-gray-900 transition-colors duration-150 ease-in-out">
+        <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current">
+            <path d="M8 5v14l11-7z" /> <!-- This is a simple play icon -->
+        </svg>
+    </button>
 |]
