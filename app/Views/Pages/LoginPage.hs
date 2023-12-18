@@ -11,12 +11,14 @@ import qualified Views.Layouts as Layouts
 -- Login page
 loginPage :: Html.Html
 loginPage = Layouts.mainLayout [hsx|
-    <div class="bg-gray-800 p-10 rounded-lg shadow-lg w-72">
-        <h1 class="text-4xl mb-5 text-center">Login</h1>
-        {loginForm}
+    <div class="flex items-center justify-center min-h-screen bg-gray-800">
+        <div class="max-w-sm mx-auto p-10 rounded-lg shadow-lg">
+            <h1 class="text-4xl mb-5 text-center">Login</h1>
+            {loginForm}
+        </div>
     </div>
 |]
- 
+
 loginButton :: Html.Html
 loginButton = Common.button "Login" "submit"
 

@@ -32,8 +32,6 @@ import            Network.Wai.Middleware.Static (static)
 import            Views.Pages.LoginPage (loginPage)
 import            Views.Pages.MusicPlayerPage (musicPlayerPage)
 
-import            Control.Monad.IO.Class (liftIO)
-
 -- hxPost :: AttributeValue -> Attribute
 -- hxPost = customAttribute "hx-post"
 -- hxSwap :: AttributeValue -> Attribute
