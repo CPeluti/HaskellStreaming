@@ -7,14 +7,13 @@ module RestApi (restApi) where
 
 import            Data.Foldable (for_)
 
-import            IHP.HSX.QQ 
-import            IHP.HSX.ConvertibleStrings () 
-import            IHP.HSX.ToHtml (ToHtml) 
+import            IHP.HSX.QQ
+import            IHP.HSX.ConvertibleStrings ()
+import            IHP.HSX.ToHtml (ToHtml)
 
 import            Web.Scotty as Scotty
 import            Text.Blaze.Html.Renderer.Text (renderHtml)
 import            Text.Blaze.Html5 as H
--- import            Text.Blaze.Html5.Attributes as A
 
 import qualified  Data.Text.Lazy as T
 
@@ -28,8 +27,12 @@ import            Data.ByteString.Builder (byteString)
 import            Data.ByteString as B
 import            Streaming.ByteString  as BSS (toChunks, readFile)
 import            System.Directory (getCurrentDirectory)
-import            Views.Pages (loginPage)
 import            Network.Wai.Middleware.Static (static)
+
+import            Views.Pages.LoginPage (loginPage)
+import            Views.Pages.MusicPlayerPage (musicPlayerPage)
+
+import            Control.Monad.IO.Class (liftIO)
 
 -- hxPost :: AttributeValue -> Attribute
 -- hxPost = customAttribute "hx-post"
@@ -38,14 +41,6 @@ import            Network.Wai.Middleware.Static (static)
 
 -- myButton :: Html
 -- myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
-
--- audioComponent = [hsx|
---   <audio controls>
---     <source src="horse.ogg" type="audio/ogg">
---     <source src="horse.mp3" type="audio/mpeg">
---     Your browser does not support the audio tag.
---   </audio>  
--- |]
 
 baseHtml :: IHP.HSX.ToHtml.ToHtml a => a -> Html
 baseHtml bodyContent= [hsx|
@@ -125,7 +120,7 @@ streamingBD s =
   where
   streamingBody writeBuilder flush = runResourceT $ void $ S.effects $ S.for s writer
     where
-    writer aux = do 
+    writer aux = do
         _ <-liftIO (writeBuilder (byteString aux))
         liftIO flush
 --
@@ -146,21 +141,19 @@ restApi =
         password <- Scotty.param "password"
         liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
          -- TODO: implement authentication
-        Scotty.redirect "/music"
-         -- get "/player" $
-    --   Scotty.html $ renderHtml $
-    --     H.div $
-    --       audioComponent
-          
-          
+        Scotty.redirect "/musicPage"
+
+
     get "/music" $ do
-      start <- parseStart <$> Scotty.header "range"
-      end <- parseEnd <$> Scotty.header "range"
+      startRange <- parseStart <$> Scotty.header "range"
+      endRange <- parseEnd <$> Scotty.header "range"
       absolutePath <- liftIO $ getAbsolutePath fPathRelative
-      fSize <- liftIO $ fileSize absolutePath
-      -- start <- 
+      totalSize <- liftIO $ fileSize absolutePath
+
       Scotty.status status206
       Scotty.setHeader "Content-Type" "audio/mpeg"
-      Scotty.setHeader "Content-Length" (T.pack $ show fSize)
-      Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack start)) (checkEnd (parseInt (T.unpack end)) fSize))
+      Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
+      Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
       Scotty.stream $ streamingBD $ generateStream absolutePath
+    get "/musicPage" $ do
+      Scotty.html $ renderHtml $ baseHtml musicPlayerPage
