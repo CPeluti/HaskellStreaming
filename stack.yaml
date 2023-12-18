@@ -45,8 +45,8 @@ extra-deps:
     commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
     subdirs:
       - beam-core
-      - beam-sqlite
-  - sqlite-simple-0.4.18.2
+      - beam-postgres
+  - postgresql-simple-0.7.0.0
   - beam-migrate-0.5.2.1@sha256:1ad12bcf5c6e092b9dd5f2a8c23f62dde07bb9e04198b0f59dc5fac855d18bf8,4924
   - ihp-hsx-1.1.0
   - megaparsec-9.2.2

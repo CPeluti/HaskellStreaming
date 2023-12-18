@@ -34,9 +34,9 @@ dependencies:
 - wai
 - http-types
 - beam-core
-- beam-sqlite
+- beam-postgres
 - beam-migrate
-- sqlite-simple
+- postgresql-simple
 - time
 - directory
 - wai-middleware-static

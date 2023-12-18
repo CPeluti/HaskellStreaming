@@ -14,10 +14,10 @@
 
 module              Database (db) where
 
-import              Database.SQLite.Simple
+import              Database.PostgreSQL.Simple
 import              Database.Beam
 import              Database.Beam.Migrate
-import              Database.Beam.Sqlite
+import              Database.Beam.Postgres
 import              Database.Beam.Migrate.Simple (verifySchema, createSchema, VerificationResult(..))
 import              Database.Beam.Sqlite.Migrate (migrationBackend)
 import              Control.Exception
@@ -87,6 +87,6 @@ _initializeTables = bracket (open "haspotifaskell.db") close $ \conn ->
         VerificationFailed _  -> createSchema migrationBackend _appDb
         VerificationSucceeded -> pure ()
 
---createUser = bracket (open "haspotifaskell.db") close $ \conn ->
---    runBeamSqlite conn $ do----
---    --      insert (users appDb) $ insertValues [User "p@teste.com" "arst" "tsra" "2134"]
+createUser = bracket (open "haspotifaskell.db") close $ \conn ->
+   runBeamSqlite conn $ do----
+        insert (users appDb) $ insertValues [User "p@teste.com" "arst" "tsra" "2134"]
