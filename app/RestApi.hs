@@ -9,12 +9,12 @@ import            Data.Foldable (for_)
 
 import            IHP.HSX.QQ 
 import            IHP.HSX.ConvertibleStrings () 
-import            IHP.HSX.ToHtml () 
+import            IHP.HSX.ToHtml (ToHtml) 
 
 import            Web.Scotty as Scotty
 import            Text.Blaze.Html.Renderer.Text (renderHtml)
 import            Text.Blaze.Html5 as H
-import            Text.Blaze.Html5.Attributes as A
+-- import            Text.Blaze.Html5.Attributes as A
 
 import qualified  Data.Text.Lazy as T
 
@@ -31,13 +31,13 @@ import            System.Directory (getCurrentDirectory)
 import            Views (loginPage)
 import            Network.Wai.Middleware.Static (static)
 
-hxPost :: AttributeValue -> Attribute
-hxPost = customAttribute "hx-post"
-hxSwap :: AttributeValue -> Attribute
-hxSwap = customAttribute "hx-swap"
+-- hxPost :: AttributeValue -> Attribute
+-- hxPost = customAttribute "hx-post"
+-- hxSwap :: AttributeValue -> Attribute
+-- hxSwap = customAttribute "hx-swap"
 
-myButton :: Html
-myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
+-- myButton :: Html
+-- myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
 
 -- audioComponent = [hsx|
 --   <audio controls>
@@ -47,6 +47,7 @@ myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
 --   </audio>  
 -- |]
 
+baseHtml :: IHP.HSX.ToHtml.ToHtml a => a -> Html
 baseHtml bodyContent= [hsx|
   <html>
     <head>

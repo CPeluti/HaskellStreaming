@@ -1,34 +1,31 @@
--- app/Views.hs
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 
 module Views (loginPage) where
 
 import IHP.HSX.QQ (hsx)
-import Prelude
-import Text.Blaze.Html5 as H
-import Text.Blaze.Html5.Attributes as A
+import qualified Text.Blaze.Html as Html
 
--- Login Page
-loginPage :: Html
-loginPage classes = [hsx|
+loginPage :: Html.Html
+loginPage = [hsx|
     <html>
-        <head>
-            <title>Login</title>
-            <link rel="stylesheet" type="text/css" href="/static/styles.css">
-        </head>
-        <body class="login-body">
-            <div class="login-container">
-                <h1 class="login-title">Login</h1>
-                <form class="login-form" method="post" action="/login">
-                    <div class="input-container">
-                        <input type="text" id="username" name="username" placeholder="Username" required>
+        <body class="bg-gray-900 text-white font-sans flex justify-center items-center h-screen m-0">
+            <div class="bg-gray-800 p-10 rounded-lg shadow-lg w-72">
+                <h1 class="text-4xl mb-5 text-center">Login</h1>
+                <form class="space-y-5" method="post" action="/login">
+                    <div>
+                        <input class="bg-gray-700 w-full p-4 rounded text-white focus:outline-none focus:shadow-outline" 
+                               type="text" id="username" name="username" placeholder="Username" required>
                     </div>
-                    <div class="input-container">
-                        <input type="password" id="password" name="password" placeholder="Password" required>
+                    <div>
+                        <input class="bg-gray-700 w-full p-4 rounded text-white mb-4 focus:outline-none focus:shadow-outline" 
+                               type="password" id="password" name="password" placeholder="Password" required>
                     </div>
-                    <div class="button-container">
-                        <button class="bg-violet-400 hover:bg-green-500 border-none text-white font-bold" type="submit">Login</button>
+                    <div>
+                        <button class="w-full p-4 bg-purple-500 text-white rounded focus:outline-none focus:shadow-outline hover:bg-green-600 transition-colors" 
+                                type="submit">
+                            Login
+                        </button>
                     </div>
                 </form>
             </div>
