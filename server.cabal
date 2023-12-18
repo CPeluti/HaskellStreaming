@@ -63,7 +63,8 @@ executable server-exe
       RestApi
       Views.Common
       Views.Layouts
-      Views.Pages
+      Views.Pages.LoginPage
+      Views.Pages.MusicPlayerPage
       Paths_server
   autogen-modules:
       Paths_server
