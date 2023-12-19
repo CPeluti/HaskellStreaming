@@ -35,19 +35,19 @@ library
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
-    , beam-core
-    , beam-migrate
-    , beam-sqlite
     , blaze-html
     , bytestring
     , directory
+    , esqueleto
     , http-types
     , ihp-hsx
     , mtl
+    , persistent
+    , persistent-sqlite
+    , persistent-template
     , raw-strings-qq
     , resourcet
     , scotty
-    , sqlite-simple
     , streaming
     , streaming-bytestring
     , text
@@ -59,7 +59,6 @@ library
 executable server-exe
   main-is: Main.hs
   other-modules:
-      Database
       RestApi
       Views.Common
       Views.Layouts
@@ -73,20 +72,20 @@ executable server-exe
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
-    , beam-core
-    , beam-migrate
-    , beam-sqlite
     , blaze-html
     , bytestring
     , directory
+    , esqueleto
     , http-types
     , ihp-hsx
     , mtl
+    , persistent
+    , persistent-sqlite
+    , persistent-template
     , raw-strings-qq
     , resourcet
     , scotty
     , server
-    , sqlite-simple
     , streaming
     , streaming-bytestring
     , text
@@ -107,20 +106,20 @@ test-suite server-test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
-    , beam-core
-    , beam-migrate
-    , beam-sqlite
     , blaze-html
     , bytestring
     , directory
+    , esqueleto
     , http-types
     , ihp-hsx
     , mtl
+    , persistent
+    , persistent-sqlite
+    , persistent-template
     , raw-strings-qq
     , resourcet
     , scotty
     , server
-    , sqlite-simple
     , streaming
     , streaming-bytestring
     , text

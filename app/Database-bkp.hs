@@ -19,7 +19,7 @@ import              Database.Beam
 import              Database.Beam.Migrate
 import              Database.Beam.Postgres
 import              Database.Beam.Migrate.Simple (verifySchema, createSchema, VerificationResult(..))
-import              Database.Beam.Sqlite.Migrate (migrationBackend)
+-- import              Database.Beam.Sqlite.Migrate (migrationBackend)
 import              Control.Exception
 import              Data.ByteString
 import              Data.Time.LocalTime
@@ -30,6 +30,16 @@ import              Data.Text (Text)
 db :: String
 db = ""
 
+connectionInfo :: ConnectInfo
+connectionInfo =
+  defaultConnectInfo
+    { connectHost = "localhost"
+    , connectPort = 5432
+    , connectDatabase = "app"
+    , connectUser = "postgres"
+    , connectPassword = "2134"
+    }
+
 -- Generate DB
 data UserT f
     = User
@@ -39,7 +49,10 @@ data UserT f
     -- , userPhoto  :: Columnar f ByteString
     , userPassword  :: Columnar f Text }
     deriving (Generic, Beamable)
-type User = UserT Identity; deriving instance Show User
+
+type User = UserT Identity
+deriving instance Show User
+
 data MusicT f
     = Music
     { musicFilePath     :: Columnar f Text
@@ -52,12 +65,18 @@ data MusicT f
     , musicLength  :: Columnar f Int32}
     deriving (Generic, Beamable)
 
+type Music = MusicT Identity
+deriving instance Show Music
+
 data PlaylistT f
     = Playlist
     { playlistName     :: Columnar f Text
     , playlistThumbnail  :: Columnar f ByteString
     , playlistAuthor :: Columnar f Text }
     deriving (Generic, Beamable)
+
+type Playlist = PlaylistT Identity
+deriving instance Show Playlist
 
 instance Table UserT where
     data PrimaryKey UserT f = UserId (Columnar f Text) deriving (Generic, Beamable)
@@ -75,18 +94,16 @@ data AppDb f = AppDb
     { users :: f (TableEntity UserT) 
     , playlists :: f (TableEntity PlaylistT)
     , musics :: f (TableEntity MusicT) 
-    } deriving (Generic, Database be)
+    } deriving (Generic, Database Postgres)
+
+appDb :: DatabaseSettings Postgres AppDb
+appDb = unCheckDatabase defaultMigratableDbSettings
+
+-- migrateDB :: Connection
+--           -> IO (Maybe (CheckedDatabaseSettings Postgres FlowerDB))
+-- migrateDB conn = runBeamPostgresDebug putStrLn conn $ verifySchema migrationBackend appDb $ createSchema migrationBackend appDb
+
+
 --
 
-_appDb :: CheckedDatabaseSettings Sqlite AppDb
-_appDb = defaultMigratableDbSettings
 
-_initializeTables :: IO ()
-_initializeTables = bracket (open "haspotifaskell.db") close $ \conn ->
-    runBeamSqlite conn $ verifySchema migrationBackend _appDb >>= \case
-        VerificationFailed _  -> createSchema migrationBackend _appDb
-        VerificationSucceeded -> pure ()
-
-createUser = bracket (open "haspotifaskell.db") close $ \conn ->
-   runBeamSqlite conn $ do----
-        insert (users appDb) $ insertValues [User "p@teste.com" "arst" "tsra" "2134"]

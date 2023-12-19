@@ -5,46 +5,6 @@
 
 packages:
 - completed:
-    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
-    git: https://github.com/tathougies/beam.git
-    name: beam-core
-    pantry-tree:
-      sha256: c56d0ac5021efa997c2ddfc95dd9f88e30ac1fea08eddd7922316cc2f050b38d
-      size: 2705
-    subdir: beam-core
-    version: 0.10.1.0
-  original:
-    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
-    git: https://github.com/tathougies/beam.git
-    subdir: beam-core
-- completed:
-    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
-    git: https://github.com/tathougies/beam.git
-    name: beam-postgres
-    pantry-tree:
-      sha256: 06302e69cf174f3f6c6cf19b2aa31952195ac7424e67e985b048bef2493c1790
-      size: 2597
-    subdir: beam-postgres
-    version: 0.5.3.1
-  original:
-    commit: 86916c1274dbfb570c59f2b8f7cb48c7ef87f133
-    git: https://github.com/tathougies/beam.git
-    subdir: beam-postgres
-- completed:
-    hackage: postgresql-simple-0.7.0.0@sha256:94ec1f140bec01d92bdf236cad9b45fe3b5c90e35a2385f53de52d6e407f0f7a,4757
-    pantry-tree:
-      sha256: efdef751b392218f67175d23f477aeb2c121dbaecbe561841a07e8b85ebea746
-      size: 4255
-  original:
-    hackage: postgresql-simple-0.7.0.0
-- completed:
-    hackage: beam-migrate-0.5.2.1@sha256:1ad12bcf5c6e092b9dd5f2a8c23f62dde07bb9e04198b0f59dc5fac855d18bf8,4924
-    pantry-tree:
-      sha256: cc5024fae77beeca8c7e24bc00f1e04474cfc23461b41d2cd10ddcce52f764ba
-      size: 1721
-  original:
-    hackage: beam-migrate-0.5.2.1@sha256:1ad12bcf5c6e092b9dd5f2a8c23f62dde07bb9e04198b0f59dc5fac855d18bf8,4924
-- completed:
     hackage: ihp-hsx-1.1.0@sha256:d72b1bba5503dc75bbf281d20fa53544618bb9d9e789083e5d26e06d00675743,2620
     pantry-tree:
       sha256: f779fc429986f67a82198117b5878eac453f6e517e3ae4f8fa2bdee8c7c4e7c2
