@@ -63,26 +63,23 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 -- FUNCOES PLAYLIST
 
 runDb :: SqlPersistT (ResourceT (NoLoggingT IO)) a -> IO a
-runDb = runNoLoggingT 
-      . runResourceT 
-      . withSqliteConn "dev.sqlite3" 
+runDb = runNoLoggingT
+      . runResourceT
+      . withSqliteConn "dev.sqlite3"
       . runSqlConn
 
 insertPlaylist :: (MonadIO m) => String -> Key User -> SqlPersistT m (Key Playlist)
 insertPlaylist pName idUser = do
-  time <- (liftIO getCurrentTime)
-  id <- insert $ Playlist pName idUser time
-  return id
+  time <- liftIO getCurrentTime
+  insert $ Playlist pName idUser time
 
 updatePlaylistName :: (MonadIO m) => Key Playlist -> String -> SqlPersistT m ()
-updatePlaylistName playlistId updatedName = do
-  update playlistId [PlaylistName =. updatedName]
+updatePlaylistName playlistId updatedName = update playlistId [PlaylistName =. updatedName]
 
 -- updatePlaylistImage :: (MonadIO) => Key Playlist -> ByteString -> SqlPersistT m ()
 
 deletePlaylist :: (MonadIO m) => Key Playlist -> SqlPersistT m ()
-deletePlaylist playlistId = do
-  delete playlistId
+deletePlaylist = delete
 
 selectPlaylistByAuthor :: (MonadIO m) => Key User -> SqlPersistT m [Entity Playlist]
 selectPlaylistByAuthor wantedAuthor = selectList [PlaylistAuthor ==. wantedAuthor] []
@@ -92,75 +89,59 @@ selectPlaylistByName wantedName = selectList [PlaylistName ==. wantedName] []
 
 selectAllPlaylists :: (MonadIO m) => SqlPersistT m [Entity Playlist]
 selectAllPlaylists = do
-  playlists <- selectList [] [Asc PlaylistId]
-  return playlists
+  selectList [] [Asc PlaylistId]
 
 -- FUNCOES USER
 insertUser :: (MonadIO m) => String -> String -> String -> String -> SqlPersistT m (Key User)
 insertUser uEmail uFirstName uLastName uPassword = do
-  time <- (liftIO getCurrentTime)
-  id <- insert $ User  uEmail uFirstName uLastName uPassword time
-  return id
+  time <- liftIO getCurrentTime
+  insert $ User  uEmail uFirstName uLastName uPassword time
 
 updateUserName :: (MonadIO m) => Key User -> String -> String -> SqlPersistT m ()
-updateUserName userId updatedFName updatedLName = do
-  update userId [UserFirstName =. updatedFName, UserLastName =. updatedLName]
+updateUserName userId updatedFName updatedLName = update userId [UserFirstName =. updatedFName, UserLastName =. updatedLName]
 
 updateUserEmail :: (MonadIO m) => Key User -> String -> SqlPersistT m ()
-updateUserEmail userId updatedEmail = do
-  update userId [UserEmail =. updatedEmail]
+updateUserEmail userId updatedEmail = update userId [UserEmail =. updatedEmail]
 
 updateUserPassword :: (MonadIO m) => Key User -> String -> SqlPersistT m ()
-updateUserPassword userId updatedPassword = do
-  update userId [UserPassword =. updatedPassword]
+updateUserPassword userId updatedPassword = update userId [UserPassword =. updatedPassword]
 
 deleteUser :: (MonadIO m) => Key User -> SqlPersistT m ()
-deleteUser userId = do
-  delete userId
+deleteUser = delete
 
 selectAllUsers :: (MonadIO m) => SqlPersistT m [Entity User]
 selectAllUsers = do
-  users <- selectList [] [Asc UserId]
-  return users
+  selectList [] [Asc UserId]
 
 -- FUNCOES MUSICAS
 insertMusic :: (MonadIO m) => String -> String -> String -> UTCTime -> String -> Int -> Int -> SqlPersistT m (Key Music)
 insertMusic mFilePath mName mAuthor mReleaseDate mAlbum mFileSize mLength = do
-  time <- (liftIO getCurrentTime)
-  id <- insert $ Music mFilePath mName mAuthor mReleaseDate mAlbum mFileSize mLength time
-  return id
+  time <- liftIO getCurrentTime
+  insert $ Music mFilePath mName mAuthor mReleaseDate mAlbum mFileSize mLength time
 
 updateMusicName :: (MonadIO m) => Key Music -> String -> SqlPersistT m ()
-updateMusicName musicId updatedName = do
-  update musicId [MusicName =. updatedName]
+updateMusicName musicId updatedName = update musicId [MusicName =. updatedName]
 
 updateMusicFilePath :: (MonadIO m) => Key Music -> String -> SqlPersistT m ()
-updateMusicFilePath musicId updatedPath = do
-  update musicId [MusicFilePath =. updatedPath]
+updateMusicFilePath musicId updatedPath = update musicId [MusicFilePath =. updatedPath]
 
 updateMusicAuthor :: (MonadIO m) => Key Music -> String -> SqlPersistT m ()
-updateMusicAuthor musicId updatedAuthor = do
-  update musicId [MusicAuthor =. updatedAuthor]
+updateMusicAuthor musicId updatedAuthor = update musicId [MusicAuthor =. updatedAuthor]
 
 updateMusicReleaseDate :: (MonadIO m) => Key Music -> UTCTime -> SqlPersistT m ()
-updateMusicReleaseDate musicId updatedDate = do
-  update musicId [MusicReleaseDate =. updatedDate]
+updateMusicReleaseDate musicId updatedDate = update musicId [MusicReleaseDate =. updatedDate]
 
 updateMusicAlbum :: (MonadIO m) => Key Music -> String -> SqlPersistT m ()
-updateMusicAlbum musicId updatedAlbum = do
-  update musicId [MusicAlbum =. updatedAlbum]
+updateMusicAlbum musicId updatedAlbum = update musicId [MusicAlbum =. updatedAlbum]
 
 updateMusicFileSize :: (MonadIO m) => Key Music -> Int -> SqlPersistT m ()
-updateMusicFileSize musicId updatedFileSize = do
-  update musicId [MusicFileSize =. updatedFileSize]
+updateMusicFileSize musicId updatedFileSize = update musicId [MusicFileSize =. updatedFileSize]
 
 updateMusicLength :: (MonadIO m) => Key Music -> Int -> SqlPersistT m ()
-updateMusicLength musicId updatedLength = do
-  update musicId [MusicLength =. updatedLength]
+updateMusicLength musicId updatedLength = update musicId [MusicLength =. updatedLength]
 
 deleteMusic :: (MonadIO m) => Key Music -> SqlPersistT m ()
-deleteMusic musicId = do
-  delete musicId
+deleteMusic = delete
 
 selectMusicByAuthor :: (MonadIO m) => String -> SqlPersistT m [Entity Music]
 selectMusicByAuthor wantedAuthor = selectList [MusicAuthor ==. wantedAuthor] []
@@ -176,18 +157,15 @@ selectMusicByRelesate wantedDate = selectList [MusicReleaseDate ==. wantedDate] 
 
 selectAllSongs :: (MonadIO m) => SqlPersistT m [Entity Music]
 selectAllSongs = do
-  songs <- selectList [] [Asc MusicId]
-  return songs
+  selectList [] [Asc MusicId]
 
 -- FUNCOES RELATION
 insertRelation :: (MonadIO m) => Key Playlist -> Key Music -> SqlPersistT m (Key Relation)
 insertRelation idPlaylist idMusic = do
-  id <- insert $ Relation  idPlaylist idMusic
-  return id
+  insert $ Relation  idPlaylist idMusic
 
 deleteRelation :: (MonadIO m) => Key Relation -> SqlPersistT m ()
-deleteRelation relationId = do
-  delete relationId
+deleteRelation = delete
 
 selectRelationByMusic :: (MonadIO m) => Key Music -> SqlPersistT m [Entity Relation]
 selectRelationByMusic wantedMusic = selectList [RelationMusic ==. wantedMusic] []
