@@ -31,43 +31,43 @@ import           DatabaseHaspotifaskell
 
 main :: IO ()
 main = runSqlite "teste.db" $ do
-  -- runMigration migrateAll
+  runMigration migrateAll
+  liftIO restApi
+  -- idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
+  -- idUser2 <- insertUser "testeteste@gmail.com" "testeteste" "tt" "senhaa"
+  -- updateUserName idUser "teste" "tes"
+  -- deleteUser idUser
 
-  idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
-  idUser2 <- insertUser "testeteste@gmail.com" "testeteste" "tt" "senhaa"
-  updateUserName idUser "teste" "tes"
-  deleteUser idUser
 
-
-  idPlaylist <- insertPlaylist "Musicas para dormir" idUser2
-  updatePlaylistName idPlaylist "Musicas para dancar"
-  deletePlaylist idPlaylist
+  -- idPlaylist <- insertPlaylist "Musicas para dormir" idUser2
+  -- updatePlaylistName idPlaylist "Musicas para dancar"
+  -- deletePlaylist idPlaylist
   
-  idPlaylist1 <- insertPlaylist "Musicas legais" idUser2
-  idPlaylist2 <- insertPlaylist "Musicas tristes" idUser2
-  idPlaylist3 <- insertPlaylist "Musicas para quebrar tudo" idUser2
-  idPlaylist4 <- insertPlaylist "Musicas divertidas" idUser2
+  -- idPlaylist1 <- insertPlaylist "Musicas legais" idUser2
+  -- idPlaylist2 <- insertPlaylist "Musicas tristes" idUser2
+  -- idPlaylist3 <- insertPlaylist "Musicas para quebrar tudo" idUser2
+  -- idPlaylist4 <- insertPlaylist "Musicas divertidas" idUser2
 
   -- playlistsAna <- selectPlaylistByAuthor "Ana"
   -- liftIO $ mapM_ (\(Entity _ playlist) -> putStrLn $ "Nome: " ++ playlistName playlist ++ " Autor: " ++ playlistAuthor playlist) playlistsAna
 
-  let releaseDate = UTCTime (fromGregorian 2018 06 21) 0
-  idMusic <- insertMusic "FilePath" "musica" "autor" releaseDate "album" 20 3
+  -- let releaseDate = UTCTime (fromGregorian 2018 06 21) 0
+  -- idMusic <- insertMusic "FilePath" "musica" "autor" releaseDate "album" 20 3
 
-  updateMusicName idMusic "novo nome"
-  updateMusicAuthor idMusic "novo autor"
-  updateMusicAlbum idMusic "novo album"
-  updateMusicFilePath idMusic "novo path"
-  let newReleaseDate = UTCTime (fromGregorian 2018 06 01) 0
-  updateMusicReleaseDate idMusic newReleaseDate
-  updateMusicFileSize idMusic 200
-  updateMusicLength idMusic 300
+  -- updateMusicName idMusic "novo nome"
+  -- updateMusicAuthor idMusic "novo autor"
+  -- updateMusicAlbum idMusic "novo album"
+  -- updateMusicFilePath idMusic "novo path"
+  -- let newReleaseDate = UTCTime (fromGregorian 2018 06 01) 0
+  -- updateMusicReleaseDate idMusic newReleaseDate
+  -- updateMusicFileSize idMusic 200
+  -- updateMusicLength idMusic 300
 
-  deleteMusic idMusic
+  -- deleteMusic idMusic
 
-  idMusic1 <- insertMusic "FilePath" "Believer" "autor1" releaseDate "album" 20 3
-  idMusic2 <- insertMusic "FilePath" "Run" "autor2" releaseDate "album" 20 3
-  idMusic3 <- insertMusic "FilePath" "Radioactive" "autor3" releaseDate "albumLegal" 20 3
+  -- idMusic1 <- insertMusic "FilePath" "Believer" "autor1" releaseDate "album" 20 3
+  -- idMusic2 <- insertMusic "FilePath" "Run" "autor2" releaseDate "album" 20 3
+  -- idMusic3 <- insertMusic "FilePath" "Radioactive" "autor3" releaseDate "albumLegal" 20 3
 
 
   -- musicasLegais <- selectMusicByName "Run"
@@ -83,15 +83,15 @@ main = runSqlite "teste.db" $ do
   -- musicasData <- selectMusicByRelesate queryDate
   -- liftIO $ mapM_ (\(Entity _ music) -> putStrLn $ "Nome: " ++ musicName music ++ " Autor: " ++ musicAuthor music) musicasData
 
-  idRelation <- insertRelation idPlaylist1 idMusic2
-  idRelation2 <- insertRelation idPlaylist1 idMusic2
-  idRelation3 <- insertRelation idPlaylist1 idMusic2
-  deleteRelation idRelation3
+  -- idRelation <- insertRelation idPlaylist1 idMusic2
+  -- idRelation2 <- insertRelation idPlaylist1 idMusic2
+  -- idRelation3 <- insertRelation idPlaylist1 idMusic2
+  -- deleteRelation idRelation3
 
-  idRelation4 <- insertRelation idPlaylist1 idMusic1
-  idRelation5 <- insertRelation idPlaylist1 idMusic3
-  idRelation6 <- insertRelation idPlaylist2 idMusic3
-  idRelation7 <- insertRelation idPlaylist2 idMusic1
+  -- idRelation4 <- insertRelation idPlaylist1 idMusic1
+  -- idRelation5 <- insertRelation idPlaylist1 idMusic3
+  -- idRelation6 <- insertRelation idPlaylist2 idMusic3
+  -- idRelation7 <- insertRelation idPlaylist2 idMusic1
 
   -- musicasPlaylist1 <- selectRelationByPlaylist idPlaylist1
   -- liftIO $ mapM_ (\(Entity _ relation) -> putStrLn $ "Musica: " ++ show (relationMusic relation)) musicasPlaylist1

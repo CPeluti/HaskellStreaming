@@ -32,6 +32,9 @@ import            Network.Wai.Middleware.Static (static)
 import            Views.Pages.LoginPage (loginPage)
 import            Views.Pages.MusicPlayerPage (musicPlayerPage)
 
+import           DatabaseHaspotifaskell
+
+
 -- hxPost :: AttributeValue -> Attribute
 -- hxPost = customAttribute "hx-post"
 -- hxSwap :: AttributeValue -> Attribute
@@ -154,4 +157,5 @@ restApi =
       Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
       Scotty.stream $ streamingBD $ generateStream absolutePath
     get "/musicPage" $ do
+      idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
       Scotty.html $ renderHtml $ baseHtml musicPlayerPage
