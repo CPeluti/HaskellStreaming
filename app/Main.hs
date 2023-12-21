@@ -27,12 +27,27 @@ import           Data.ByteString
 import           Data.Time
 import           Control.Monad.IO.Class
 import           DatabaseHaspotifaskell
+import Control.Monad.Logger (NoLoggingT)
+import Control.Monad.Trans.Resource (ResourceT)
 
+createDummyData :: SqlPersistT (NoLoggingT (ResourceT IO)) ([Playlist], [Music])
+createDummyData = do
+    currentTime <- liftIO getCurrentTime
+    mockUserId <- insertUser "example@email.com" "FirstName" "LastName" "passwordHash"
+    let dummyPlaylists = [Playlist "Playlist 1" mockUserId currentTime,
+                          Playlist "Playlist 2" mockUserId currentTime,
+                          Playlist "Playlist 3" mockUserId currentTime]
+    let dummyTracks = [Music "path/to/track1.mp3" "Track 1" "Artist 1" currentTime "Album 1" 320000 180 currentTime,
+                       Music "path/to/track2.mp3" "Track 2" "Artist 2" currentTime "Album 2" 320000 180 currentTime,
+                       Music "path/to/track3.mp3" "Track 3" "Artist 3" currentTime "Album 3" 320000 180 currentTime]
+    return (dummyPlaylists, dummyTracks)
 
 main :: IO ()
 main = runSqlite "teste.db" $ do
   runMigration migrateAll
-  liftIO restApi
+
+  (playlists, tracks) <- createDummyData
+  liftIO $ restApi playlists tracks
 
   idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
   idUser2 <- insertUser "testeteste@gmail.com" "testeteste" "tt" "senhaa"
