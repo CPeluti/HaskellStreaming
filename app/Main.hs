@@ -1,5 +1,3 @@
--- module Main (main) where
--- import RestApi (restApi)
 -- main :: IO ()
 -- main = 
 --   
@@ -18,6 +16,8 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleInstances #-}
+module Main (main) where
+import RestApi (restApi)
 import qualified Database.Esqueleto as E
 import           Control.Monad.IO.Class  (liftIO)
 import           Database.Persist
@@ -207,5 +207,6 @@ main = runSqlite "teste.db" $ do
   -- let queryDate = UTCTime (fromGregorian 2018 06 21) 0
   -- musicasData <- selectMusicByRelesate queryDate
   -- liftIO $ mapM_ (\(Entity _ music) -> putStrLn $ "Nome: " ++ musicName music ++ " Autor: " ++ musicAuthor music) musicasData
+  liftIO restApi
 
   return ()
