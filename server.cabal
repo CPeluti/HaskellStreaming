@@ -41,6 +41,7 @@ library
     , esqueleto
     , http-types
     , ihp-hsx
+    , monad-logger
     , mtl
     , persistent
     , persistent-sqlite
@@ -65,7 +66,8 @@ executable server-exe
       Views.Layouts
       Views.Pages.FileUploadPage
       Views.Pages.LoginPage
-      Views.Pages.MusicPlayerPage
+      Views.Pages.MusicPlayer.CurrentlyPlayingBar
+      Views.Pages.MusicPlayer.MusicPlayerPage
       Paths_server
   autogen-modules:
       Paths_server
@@ -80,6 +82,7 @@ executable server-exe
     , esqueleto
     , http-types
     , ihp-hsx
+    , monad-logger
     , mtl
     , persistent
     , persistent-sqlite
@@ -114,6 +117,7 @@ test-suite server-test
     , esqueleto
     , http-types
     , ihp-hsx
+    , monad-logger
     , mtl
     , persistent
     , persistent-sqlite
