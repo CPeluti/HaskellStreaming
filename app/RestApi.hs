@@ -30,16 +30,10 @@ import            System.Directory (getCurrentDirectory)
 import            Network.Wai.Middleware.Static (static)
 
 import            Views.Pages.LoginPage (loginPage)
-import            Views.Pages.MusicPlayerPage (musicPlayerPage)
+import            Views.Pages.MusicPlayer.MusicPlayerPage (musicPlayerPage)
 import            Views.Pages.FileUploadPage (fileUploadPage)
+import            DatabaseHaspotifaskell
 
--- hxPost :: AttributeValue -> Attribute
--- hxPost = customAttribute "hx-post"
--- hxSwap :: AttributeValue -> Attribute
--- hxSwap = customAttribute "hx-swap"
-
--- myButton :: Html
--- myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
 
 baseHtml :: IHP.HSX.ToHtml.ToHtml a => a -> Html
 baseHtml bodyContent= [hsx|
@@ -124,11 +118,11 @@ streamingBD s =
         liftIO flush
 --
 
-restApi :: IO ()
-restApi =
-  scotty 3000 $ do
-    middleware $ static
-    get "/" $
+restApi :: [Playlist] -> [Music] -> IO ()
+restApi playlists tracks = do
+  scotty 3000 $ do    
+    middleware static
+    Scotty.get "/" $
       Scotty.html $ renderHtml $ baseHtml loginPage
     post "/clicked" $
       Scotty.html $ renderHtml $
@@ -141,11 +135,11 @@ restApi =
         liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
          -- TODO: implement authentication
         Scotty.redirect "/musicPage"
-    get "/uploadPage" $ do
+    Scotty.get "/uploadPage" $ do
         Scotty.html $ renderHtml $ baseHtml fileUploadPage
 
 
-    get "/music" $ do
+    Scotty.get "/music" $ do
       startRange <- parseStart <$> Scotty.header "range"
       endRange <- parseEnd <$> Scotty.header "range"
       absolutePath <- liftIO $ getAbsolutePath fPathRelative
@@ -156,5 +150,6 @@ restApi =
       Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
       Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
       Scotty.stream $ streamingBD $ generateStream absolutePath
-    get "/musicPage" $ do
-      Scotty.html $ renderHtml $ baseHtml musicPlayerPage
+
+    Scotty.get "/musicPage" $ do
+      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks      
