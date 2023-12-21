@@ -164,7 +164,12 @@ restApi =
         Scotty.html $ renderHtml $ baseHtml fileUploadPage
 
 
-    get "/music" $ do
+    get "/music/:id" $ do
+      (idValue :: MusicId) <- Scotty.param "id"
+      music <- liftIO $ runDb $ DB.get idValue
+      case music of
+        Just (Entity musicId musicFromDb) -> liftIO $ print musicFromDb
+        _ -> throw 404
       startRange <- parseStart <$> Scotty.header "range"
       endRange <- parseEnd <$> Scotty.header "range"
       absolutePath <- liftIO $ getAbsolutePath fPathRelative
