@@ -37,7 +37,10 @@ main = runSqlite "teste.db" $ do
   idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
   idUser2 <- insertUser "testeteste@gmail.com" "testeteste" "tt" "senhaa"
   updateUserName idUser "teste" "tes"
-  deleteUser idUser
+  -- deleteUser idUser
+  -- users <- selectAllUsers
+  -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
+
 
 
   idPlaylist <- insertPlaylist "Musicas para dormir" idUser2
@@ -48,6 +51,9 @@ main = runSqlite "teste.db" $ do
   idPlaylist2 <- insertPlaylist "Musicas tristes" idUser2
   idPlaylist3 <- insertPlaylist "Musicas para quebrar tudo" idUser2
   idPlaylist4 <- insertPlaylist "Musicas divertidas" idUser2
+
+  -- playlists <- selectAllPlaylists
+  -- liftIO $ mapM_ (\(Entity _ playlist) -> putStrLn $ "Nome: " ++ playlistName playlist) playlists
 
   -- playlistsAna <- selectPlaylistByAuthor "Ana"
   -- liftIO $ mapM_ (\(Entity _ playlist) -> putStrLn $ "Nome: " ++ playlistName playlist ++ " Autor: " ++ playlistAuthor playlist) playlistsAna
@@ -70,6 +76,8 @@ main = runSqlite "teste.db" $ do
   idMusic2 <- insertMusic "FilePath" "Run" "autor2" releaseDate "album" 20 3
   idMusic3 <- insertMusic "FilePath" "Radioactive" "autor3" releaseDate "albumLegal" 20 3
 
+  songs <- selectAllSongs
+  liftIO $ mapM_ (\(Entity _ song) -> putStrLn $ "Nome: " ++ musicName song) songs
 
   -- musicasLegais <- selectMusicByName "Run"
   -- liftIO $ mapM_ (\(Entity _ music) -> putStrLn $ "Nome: " ++ musicName music ++ " Autor: " ++ musicAuthor music) musicasLegais
