@@ -31,7 +31,8 @@ import           DatabaseHaspotifaskell
 
 main :: IO ()
 main = runSqlite "teste.db" $ do
-  -- runMigration migrateAll
+  runMigration migrateAll
+  liftIO restApi
 
   idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
   idUser2 <- insertUser "testeteste@gmail.com" "testeteste" "tt" "senhaa"
