@@ -42,6 +42,7 @@ dependencies:
 - persistent-template
 - monad-logger
 - aeson
+- wai-extra
 
 ghc-options:
 - -Wall

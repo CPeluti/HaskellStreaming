@@ -55,6 +55,7 @@ library
     , text
     , time
     , wai
+    , wai-extra
     , wai-middleware-static
   default-language: Haskell2010
 
@@ -99,6 +100,7 @@ executable server-exe
     , text
     , time
     , wai
+    , wai-extra
     , wai-middleware-static
   default-language: Haskell2010
 
@@ -135,5 +137,6 @@ test-suite server-test
     , text
     , time
     , wai
+    , wai-extra
     , wai-middleware-static
   default-language: Haskell2010

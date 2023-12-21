@@ -16,6 +16,7 @@ import            Text.Blaze.Html.Renderer.Text (renderHtml)
 import            Text.Blaze.Html5 as H
 
 import qualified  Data.Text.Lazy as T
+import qualified  Data.Text.Encoding
 
 import            Network.HTTP.Types (status206)
 import            Text.Read (readMaybe)
@@ -25,6 +26,8 @@ import            Streaming
 import qualified  Streaming.Prelude               as S
 import            Data.ByteString.Builder (byteString)
 import            Data.ByteString as B
+import qualified Data.ByteString.Char8 as BSL
+import qualified  Data.ByteString.Lazy as BLazy
 import            Streaming.ByteString  as BSS (toChunks, readFile)
 import            System.Directory (getCurrentDirectory)
 import            Network.Wai.Middleware.Static (static)
@@ -33,6 +36,7 @@ import            Views.Pages.LoginPage (loginPage)
 import            Views.Pages.MusicPlayerPage (musicPlayerPage)
 import            Views.Pages.FileUploadPage (fileUploadPage)
 
+import Network.Wai.Parse
 
 import           DatabaseHaspotifaskell
 import           Database.Persist (Entity(..))
@@ -40,6 +44,8 @@ import qualified Database.Persist.Sqlite as DB
 
 import           Models
 import           ModelsJson
+
+import            Data.Int
 
 
 -- hxPost :: AttributeValue -> Attribute
@@ -49,6 +55,8 @@ import           ModelsJson
 
 -- myButton :: Html
 -- myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
+
+musicFolder = "./musics/"
 
 baseHtml :: IHP.HSX.ToHtml.ToHtml a => a -> Html
 baseHtml bodyContent= [hsx|
@@ -171,6 +179,14 @@ restApi =
       Scotty.html $ renderHtml $ baseHtml musicPlayerPage
     
     post "/music" $ do
-      (music :: Music) <- jsonData
-      uid <- liftIO $ runDb $ DB.insert music
-      json $ Entity uid music
+      fs <- files
+      song <- liftIO $ runDb $ (DB.selectList [] [DB.Desc MusicId, DB.LimitTo 1]) 
+      lastId <- DB.fromSqlKey . DB.entityKey $ (Prelude.head song) :: Int64
+      -- fileNames <- [ BSL.unpack (fileName file) | (musicName, file)<- fs]
+      -- let fs1 = [ (musicName, BSL.unpack (fileName file), fileContent file) | (musicName, file)<- fs]
+      -- liftIO $ sequence_ [BLazy.writeFile (musicFolder ++ fileName) fileContent | (_, fileName, fileContent) <- fs1]
+
+      Scotty.text "foi"
+      -- (music :: Music) <- jsonData
+      -- uid <- liftIO $ runDb $ DB.insert music
+      -- json $ Entity uid music
