@@ -90,6 +90,11 @@ selectPlaylistByAuthor wantedAuthor = selectList [PlaylistAuthor ==. wantedAutho
 selectPlaylistByName :: (MonadIO m) => String -> SqlPersistT m [Entity Playlist]
 selectPlaylistByName wantedName = selectList [PlaylistName ==. wantedName] []
 
+selectAllPlaylists :: (MonadIO m) => SqlPersistT m [Entity Playlist]
+selectAllPlaylists = do
+  playlists <- selectList [] [Asc PlaylistId]
+  return playlists
+
 -- FUNCOES USER
 insertUser :: (MonadIO m) => String -> String -> String -> String -> SqlPersistT m (Key User)
 insertUser uEmail uFirstName uLastName uPassword = do
@@ -112,6 +117,11 @@ updateUserPassword userId updatedPassword = do
 deleteUser :: (MonadIO m) => Key User -> SqlPersistT m ()
 deleteUser userId = do
   delete userId
+
+selectAllUsers :: (MonadIO m) => SqlPersistT m [Entity User]
+selectAllUsers = do
+  users <- selectList [] [Asc UserId]
+  return users
 
 -- FUNCOES MUSICAS
 insertMusic :: (MonadIO m) => String -> String -> String -> UTCTime -> String -> Int -> Int -> SqlPersistT m (Key Music)
@@ -163,6 +173,11 @@ selectMusicByAlbum wantedAlbum = selectList [MusicAlbum ==. wantedAlbum] []
 
 selectMusicByRelesate :: (MonadIO m) => UTCTime -> SqlPersistT m [Entity Music]
 selectMusicByRelesate wantedDate = selectList [MusicReleaseDate ==. wantedDate] []
+
+selectAllSongs :: (MonadIO m) => SqlPersistT m [Entity Music]
+selectAllSongs = do
+  songs <- selectList [] [Asc MusicId]
+  return songs
 
 -- FUNCOES RELATION
 insertRelation :: (MonadIO m) => Key Playlist -> Key Music -> SqlPersistT m (Key Relation)
