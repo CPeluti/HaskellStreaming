@@ -5,38 +5,43 @@
 
 module RestApi (restApi) where
 
-import            Data.Foldable (for_)
+import Control.Monad.Trans.Resource
+import Data.ByteString as B
+import Data.ByteString.Builder (byteString)
+import Data.Foldable (for_)
+import qualified Data.Text.Lazy as T
+import Database.Persist (Entity (..))
+import qualified Database.Persist (Entity)
+import DatabaseHaspotifaskell
+import IHP.HSX.ConvertibleStrings ()
+import IHP.HSX.QQ
+import IHP.HSX.ToHtml (ToHtml)
+import Network.HTTP.Types (status206)
+import Network.Wai
+import Network.Wai.Middleware.Static (static)
+import Streaming
+import Streaming.ByteString as BSS (readFile, toChunks)
+import qualified Streaming.Prelude as S
+import System.Directory (getCurrentDirectory)
+import Text.Blaze.Html.Renderer.Text (renderHtml)
+import Text.Blaze.Html5 as H
+import Text.Read (readMaybe)
+import Views.Pages.FileUploadPage (fileUploadPage)
+import Views.Pages.LoginPage (loginPage)
+import Views.Pages.MusicPlayerPage (musicPlayerPage)
+import Web.Scotty as Scotty
 
-import            IHP.HSX.QQ
-import            IHP.HSX.ConvertibleStrings ()
-import            IHP.HSX.ToHtml (ToHtml)
+-- hxPost :: AttributeValue -> Attribute
+-- hxPost = customAttribute "hx-post"
+-- hxSwap :: AttributeValue -> Attribute
+-- hxSwap = customAttribute "hx-swap"
 
-import            Web.Scotty as Scotty
-import            Text.Blaze.Html.Renderer.Text (renderHtml)
-import            Text.Blaze.Html5 as H
+-- myButton :: Html
+-- myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
 
-import qualified  Data.Text.Lazy as T
-
-import            Network.HTTP.Types (status206)
-import            Text.Read (readMaybe)
-import            Control.Monad.Trans.Resource
-import            Network.Wai
-import            Streaming
-import qualified  Streaming.Prelude               as S
-import            Data.ByteString.Builder (byteString)
-import            Data.ByteString as B
-import            Streaming.ByteString  as BSS (toChunks, readFile)
-import            System.Directory (getCurrentDirectory)
-import            Network.Wai.Middleware.Static (static)
-
-import            Views.Pages.LoginPage (loginPage)
-import            Views.Pages.MusicPlayer.MusicPlayerPage (musicPlayerPage)
-import            Views.Pages.FileUploadPage (fileUploadPage)
-import            DatabaseHaspotifaskell
-
-
-baseHtml :: IHP.HSX.ToHtml.ToHtml a => a -> Html
-baseHtml bodyContent= [hsx|
+baseHtml :: (IHP.HSX.ToHtml.ToHtml a) => a -> Html
+baseHtml bodyContent =
+  [hsx|
   <html>
     <head>
       <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
@@ -68,22 +73,21 @@ fPathRelative = "src/eBG7P-K-r1Y_160.mp3"
 -- Function to get the absolute path
 getAbsolutePath :: FilePath -> IO FilePath
 getAbsolutePath anyRelativePath = do
-    currentDir <- getCurrentDirectory
-    return (currentDir ++ "/" ++ anyRelativePath)
-
+  currentDir <- getCurrentDirectory
+  return (currentDir ++ "/" ++ anyRelativePath)
 
 fileSize :: FilePath -> IO Int
 fileSize f = do
   readedFile <- B.readFile f
   return $ B.length readedFile
 
-generateStream :: MonadResource m => FilePath -> Stream (Of ByteString) m ()
+generateStream :: (MonadResource m) => FilePath -> Stream (Of ByteString) m ()
 generateStream f = toChunks $ BSS.readFile f
 
---TODO: refatorar
+-- TODO: refatorar
 parseRanges :: Maybe T.Text -> [T.Text]
 parseRanges (Just f) = T.splitOn "-" $ Prelude.last $ T.splitOn "bytes=" f
-parseRanges Nothing = ["",""]
+parseRanges Nothing = ["", ""]
 
 parseStart :: Maybe T.Text -> T.Text
 parseStart f = Prelude.head $ parseRanges f
@@ -101,43 +105,47 @@ checkStart (Just x) = x
 
 parseInt :: String -> Maybe Int
 parseInt s = readMaybe s :: Maybe Int
+
 --
 
 -- TODO: Refatorar
 generateRange :: Int -> Int -> String
-generateRange partial_start partial_end = "bytes " ++ show partial_start ++ "-" ++ show partial_end ++ "/" ++ show (partial_end-partial_start+1)
+generateRange partial_start partial_end = "bytes " ++ show partial_start ++ "-" ++ show partial_end ++ "/" ++ show (partial_end - partial_start + 1)
 
 streamingBD :: Stream (Of ByteString) (ResourceT IO) r -> StreamingBody
 streamingBD s =
   streamingBody
   where
-  streamingBody writeBuilder flush = runResourceT $ void $ S.effects $ S.for s writer
-    where
-    writer aux = do
-        _ <-liftIO (writeBuilder (byteString aux))
-        liftIO flush
+    streamingBody writeBuilder flush = runResourceT $ void $ S.effects $ S.for s writer
+      where
+        writer aux = do
+          _ <- liftIO (writeBuilder (byteString aux))
+          liftIO flush
+
 --
 
 restApi :: [Playlist] -> [Music] -> IO ()
 restApi playlists tracks = do
-  scotty 3000 $ do    
+  scotty 3000 $ do
     middleware static
     Scotty.get "/" $
-      Scotty.html $ renderHtml $ baseHtml loginPage
+      Scotty.html $
+        renderHtml $
+          baseHtml loginPage
     post "/clicked" $
-      Scotty.html $ renderHtml $
-        H.div $
-          for_ (Prelude.map show dbData) $ \id ->
-            componentButton $ toHtml id
+      Scotty.html $
+        renderHtml $
+          H.div $
+            for_ (Prelude.map show dbData) $ \id ->
+              componentButton $ toHtml id
     post "/login" $ do
-        username <- Scotty.param "username"
-        password <- Scotty.param "password"
-        liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
-         -- TODO: implement authentication
-        Scotty.redirect "/musicPage"
+      username <- Scotty.param "username"
+      password <- Scotty.param "password"
+      liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
+      -- TODO: implement authentication
+      Scotty.redirect "/musicPage"
     Scotty.get "/uploadPage" $ do
-        Scotty.html $ renderHtml $ baseHtml fileUploadPage
-
+      Scotty.html $ renderHtml $ baseHtml fileUploadPage
 
     Scotty.get "/music" $ do
       startRange <- parseStart <$> Scotty.header "range"
@@ -150,6 +158,7 @@ restApi playlists tracks = do
       Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
       Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
       Scotty.stream $ streamingBD $ generateStream absolutePath
-
-    Scotty.get "/musicPage" $ do
-      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks      
+    get "/musicPage" $ do
+      -- users <- liftIO $ runDb $ selectAllUsers
+      liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
+      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks
