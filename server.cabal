@@ -59,6 +59,7 @@ library
 executable server-exe
   main-is: Main.hs
   other-modules:
+      DatabaseHaspotifaskell
       RestApi
       Views.Common
       Views.Layouts
