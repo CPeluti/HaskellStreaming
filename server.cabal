@@ -62,6 +62,7 @@ executable server-exe
       RestApi
       Views.Common
       Views.Layouts
+      Views.Pages.FileUploadPage
       Views.Pages.LoginPage
       Views.Pages.MusicPlayerPage
       Paths_server
