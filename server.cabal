@@ -42,6 +42,7 @@ library
     , esqueleto
     , http-types
     , ihp-hsx
+    , lifted-base
     , monad-logger
     , mtl
     , persistent
@@ -86,6 +87,7 @@ executable server-exe
     , esqueleto
     , http-types
     , ihp-hsx
+    , lifted-base
     , monad-logger
     , mtl
     , persistent
@@ -123,6 +125,7 @@ test-suite server-test
     , esqueleto
     , http-types
     , ihp-hsx
+    , lifted-base
     , monad-logger
     , mtl
     , persistent

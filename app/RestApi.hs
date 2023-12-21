@@ -26,7 +26,7 @@ import            Streaming
 import qualified  Streaming.Prelude               as S
 import            Data.ByteString.Builder (byteString)
 import            Data.ByteString as B
-import qualified Data.ByteString.Char8 as BSL
+import qualified  Data.ByteString.Char8 as BSL
 import qualified  Data.ByteString.Lazy as BLazy
 import            Streaming.ByteString  as BSS (toChunks, readFile)
 import            System.Directory (getCurrentDirectory)
@@ -46,6 +46,8 @@ import           Models
 import           ModelsJson
 
 import            Data.Int
+
+import Control.Exception.Lifted
 
 
 -- hxPost :: AttributeValue -> Attribute
@@ -86,7 +88,7 @@ dbData = [1 .. 4]
 
 fPathRelative :: FilePath
 -- fPathRelative = "virtual_insanity_jamiroquai.mp3"
-fPathRelative = "src/eBG7P-K-r1Y_160.mp3"
+fPathRelative = "musics/2"
 
 -- Function to get the absolute path
 getAbsolutePath :: FilePath -> IO FilePath
@@ -181,10 +183,9 @@ restApi =
     post "/music" $ do
       fs <- files
       song <- liftIO $ runDb $ (DB.selectList [] [DB.Desc MusicId, DB.LimitTo 1]) 
-      lastId <- DB.fromSqlKey . DB.entityKey $ (Prelude.head song) :: Int64
-      -- fileNames <- [ BSL.unpack (fileName file) | (musicName, file)<- fs]
-      -- let fs1 = [ (musicName, BSL.unpack (fileName file), fileContent file) | (musicName, file)<- fs]
-      -- liftIO $ sequence_ [BLazy.writeFile (musicFolder ++ fileName) fileContent | (_, fileName, fileContent) <- fs1]
+      name <- evaluate ((DB.fromSqlKey . DB.entityKey $ (Prelude.head song) :: Int64) + 1)
+      let fs1 = [ (musicName, fileContent file) | (musicName, file)<- fs]
+      liftIO $ sequence_ [BLazy.writeFile (musicFolder ++ (show name)) fileContent | (_, fileContent) <- fs1]
 
       Scotty.text "foi"
       -- (music :: Music) <- jsonData

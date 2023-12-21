@@ -43,6 +43,7 @@ dependencies:
 - monad-logger
 - aeson
 - wai-extra
+- lifted-base
 
 ghc-options:
 - -Wall
