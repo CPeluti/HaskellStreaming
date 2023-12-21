@@ -12,11 +12,15 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeOperators #-}
+
+
 
 module DatabaseHaspotifaskell where
 
+import            Control.Monad.Trans.Resource
+import Control.Monad.Logger
 import qualified Database.Esqueleto as E
-import           Control.Monad.IO.Class  (liftIO)
 import           Database.Persist
 import           Database.Persist.Sqlite
 import           Database.Persist.TH
@@ -24,6 +28,7 @@ import           Data.ByteString
 import           Data.Time
 import           Control.Monad.IO.Class
 import           System.Posix.Types (UserID)
+import Database.Persist.Sql
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
   User
@@ -56,6 +61,12 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 |]
 
 -- FUNCOES PLAYLIST
+
+runDb :: SqlPersistT (ResourceT (NoLoggingT IO)) a -> IO a
+runDb = runNoLoggingT 
+      . runResourceT 
+      . withSqliteConn "dev.sqlite3" 
+      . runSqlConn
 
 insertPlaylist :: (MonadIO m) => String -> Key User -> SqlPersistT m (Key Playlist)
 insertPlaylist pName idUser = do

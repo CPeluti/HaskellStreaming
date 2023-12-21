@@ -160,5 +160,5 @@ restApi =
       Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
       Scotty.stream $ streamingBD $ generateStream absolutePath
     get "/musicPage" $ do
-      idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
+      test <- liftIO $ runDb $ insertUser "teste@gmail.com" "teste" "t" "senha"
       Scotty.html $ renderHtml $ baseHtml musicPlayerPage

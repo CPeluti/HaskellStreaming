@@ -41,6 +41,7 @@ library
     , esqueleto
     , http-types
     , ihp-hsx
+    , monad-logger
     , mtl
     , persistent
     , persistent-sqlite
@@ -59,6 +60,7 @@ library
 executable server-exe
   main-is: Main.hs
   other-modules:
+      DatabaseHaspotifaskell
       RestApi
       Views.Common
       Views.Layouts
@@ -79,6 +81,7 @@ executable server-exe
     , esqueleto
     , http-types
     , ihp-hsx
+    , monad-logger
     , mtl
     , persistent
     , persistent-sqlite
@@ -113,6 +116,7 @@ test-suite server-test
     , esqueleto
     , http-types
     , ihp-hsx
+    , monad-logger
     , mtl
     , persistent
     , persistent-sqlite

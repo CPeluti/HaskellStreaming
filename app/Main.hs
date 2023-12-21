@@ -19,7 +19,6 @@
 module Main (main) where
 import RestApi (restApi)
 import qualified Database.Esqueleto as E
-import           Control.Monad.IO.Class  (liftIO)
 import           Database.Persist
 import           Database.Persist.Sqlite
 import           Database.Persist.TH
@@ -30,9 +29,9 @@ import           DatabaseHaspotifaskell
 
 
 main :: IO ()
-main = runSqlite "teste.db" $ do
-  runMigration migrateAll
-  liftIO restApi
+main = do
+  runDb $ runMigration migrateAll
+  restApi
   -- idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
   -- idUser2 <- insertUser "testeteste@gmail.com" "testeteste" "tt" "senhaa"
   -- updateUserName idUser "teste" "tes"
@@ -42,7 +41,7 @@ main = runSqlite "teste.db" $ do
   -- idPlaylist <- insertPlaylist "Musicas para dormir" idUser2
   -- updatePlaylistName idPlaylist "Musicas para dancar"
   -- deletePlaylist idPlaylist
-  
+
   -- idPlaylist1 <- insertPlaylist "Musicas legais" idUser2
   -- idPlaylist2 <- insertPlaylist "Musicas tristes" idUser2
   -- idPlaylist3 <- insertPlaylist "Musicas para quebrar tudo" idUser2

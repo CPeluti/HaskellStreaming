@@ -40,6 +40,7 @@ dependencies:
 - persistent
 - persistent-sqlite
 - persistent-template
+- monad-logger
 
 ghc-options:
 - -Wall
