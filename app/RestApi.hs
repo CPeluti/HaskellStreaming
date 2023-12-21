@@ -31,6 +31,7 @@ import            Network.Wai.Middleware.Static (static)
 
 import            Views.Pages.LoginPage (loginPage)
 import            Views.Pages.MusicPlayerPage (musicPlayerPage)
+import            Views.Pages.FileUploadPage (fileUploadPage)
 
 -- hxPost :: AttributeValue -> Attribute
 -- hxPost = customAttribute "hx-post"
@@ -140,6 +141,8 @@ restApi =
         liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
          -- TODO: implement authentication
         Scotty.redirect "/musicPage"
+    get "/uploadPage" $ do
+        Scotty.html $ renderHtml $ baseHtml fileUploadPage
 
 
     get "/music" $ do
