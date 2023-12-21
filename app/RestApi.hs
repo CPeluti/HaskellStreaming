@@ -33,10 +33,13 @@ import            Views.Pages.LoginPage (loginPage)
 import            Views.Pages.MusicPlayerPage (musicPlayerPage)
 import            Views.Pages.FileUploadPage (fileUploadPage)
 
-import qualified  Database.Persist (Entity)
 
 import           DatabaseHaspotifaskell
-import Database.Persist (Entity(..))
+import           Database.Persist (Entity(..))
+import qualified Database.Persist.Sqlite as DB
+
+import           Models
+import           ModelsJson
 
 
 -- hxPost :: AttributeValue -> Attribute
@@ -164,5 +167,10 @@ restApi =
       Scotty.stream $ streamingBD $ generateStream absolutePath
     get "/musicPage" $ do
       -- users <- liftIO $ runDb $ selectAllUsers
-      liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
+      -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
       Scotty.html $ renderHtml $ baseHtml musicPlayerPage
+    
+    post "/music" $ do
+      (music :: Music) <- jsonData
+      uid <- liftIO $ runDb $ DB.insert music
+      json $ Entity uid music

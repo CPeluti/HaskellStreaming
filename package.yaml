@@ -41,6 +41,7 @@ dependencies:
 - persistent-sqlite
 - persistent-template
 - monad-logger
+- aeson
 
 ghc-options:
 - -Wall

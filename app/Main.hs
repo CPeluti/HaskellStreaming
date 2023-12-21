@@ -27,6 +27,7 @@ import           Data.Time
 import           Control.Monad.IO.Class
 import           DatabaseHaspotifaskell
 
+import Models
 
 main :: IO ()
 main = do
