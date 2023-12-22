@@ -3,16 +3,16 @@
 -- main :: IO ()
 -- main =
 --
-{-# LANGUAGE EmptyDataDecls #-}
+-- {-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+-- {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE TemplateHaskell #-}
+-- {-# LANGUAGE QuasiQuotes #-}
+-- {-# LANGUAGE StandaloneDeriving #-}
+-- {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 
@@ -21,16 +21,16 @@ module Main (main) where
 import Control.Monad.IO.Class
 import Control.Monad.Logger (NoLoggingT)
 import Control.Monad.Trans.Resource (ResourceT)
-import Data.ByteString
+-- import Data.ByteString
 import Data.Time
-import qualified Database.Esqueleto as E
-import Database.Persist
+-- import qualified Database.Esqueleto as E
+-- import Database.Persist
 import Database.Persist.Sqlite
-import Database.Persist.TH
+-- import Database.Persist.TH
 import DatabaseHaspotifaskell
 import RestApi (restApi)
 
-createDummyData :: SqlPersistT (NoLoggingT (ResourceT IO)) ([Playlist], [Music])
+createDummyData :: SqlPersistT (ResourceT (NoLoggingT IO)) ([Playlist], [Music])
 createDummyData = do
   currentTime <- liftIO getCurrentTime
   mockUserId <- insertUser "example@email.com" "FirstName" "LastName" "passwordHash"
@@ -40,16 +40,16 @@ createDummyData = do
           Playlist "Playlist 3" mockUserId currentTime
         ]
   let dummyTracks =
-        [ Music "path/to/track1.mp3" "Track 1" "Artist 1" currentTime "Album 1" 320000 180 currentTime,
-          Music "path/to/track2.mp3" "Track 2" "Artist 2" currentTime "Album 2" 320000 180 currentTime,
-          Music "path/to/track3.mp3" "Track 3" "Artist 3" currentTime "Album 3" 320000 180 currentTime
+        [ Music "./assets/virtual_insanity.mp3" "Track 1" "Artist 1" currentTime "Album 1" 320000 180 currentTime,
+          Music "./assets/paint_it_black.mp3" "Track 2" "Artist 2" currentTime "Album 2" 320000 180 currentTime,
+          Music "./assets/dont_stop_me_now.mp3" "Track 3" "Artist 3" currentTime "Album 3" 320000 180 currentTime
         ]
   return (dummyPlaylists, dummyTracks)
 
 main :: IO ()
 main = do
   runDb $ runMigration migrateAll
-  (playlists, tracks) <- createDummyData
+  (playlists, tracks) <- runDb createDummyData
   liftIO $ restApi playlists tracks
 
   -- idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
