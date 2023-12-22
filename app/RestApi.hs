@@ -29,7 +29,9 @@ import Text.Read (readMaybe)
 import Views.Pages.FileUploadPage (fileUploadPage)
 import Views.Pages.LoginPage (loginPage)
 import Views.Pages.MusicPlayer.MusicPlayerPage (musicPlayerPage)
+import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
 import Web.Scotty as Scotty
+import Data.Time (getCurrentTime)
 
 -- hxPost :: AttributeValue -> Attribute
 -- hxPost = customAttribute "hx-post"
@@ -162,3 +164,20 @@ restApi playlists tracks = do
       -- users <- liftIO $ runDb $ selectAllUsers
       -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
       Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks
+    Scotty.post "/changeTrack" $ do
+      filePath <- Scotty.param "filePath"
+      name <- Scotty.param "name"
+      author <- Scotty.param "author"
+  
+      -- Use current time as a placeholder for releaseDate
+      currentTime <- liftIO getCurrentTime
+
+      -- Assuming placeholder values for album, fileSize, and fileLength
+      let album = "Unknown Album"
+      let fileSize = 0  -- Placeholder value for file size
+      let fileLength = 0  -- Placeholder value for file length
+
+      let currentTrack = Music filePath name author currentTime album fileSize fileLength currentTime
+
+      -- Respond with the updated CurrentlyPlayingBar
+      Scotty.html $ renderHtml $ currentlyPlayingBar currentTrack
