@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 
-module Views.Pages.MusicPlayer.MusicPlayerPage (musicPlayerPage) where
+module Views.Pages.MusicPlayer.MusicPlayerPage (musicPlayerPage, trackListTable) where
 
 import IHP.HSX.QQ (hsx)
 import qualified Text.Blaze.Html as Html
@@ -50,7 +50,16 @@ mainContent tracks =
   [hsx|
     <div class="flex-grow overflow-y-auto">
         {albumCoverSection}
+        {searchBarComponent}
         {trackListTable tracks}
+    </div>
+  |]
+
+searchBarComponent :: Html.Html
+searchBarComponent = 
+  [hsx|
+    <div class="py-2 px-2">
+        <input type="text" name="searchQuery" placeholder="Search Tracks..." hx-get="/search-tracks" hx-params="searchQuery" hx-trigger="keyup changed delay:500ms" hx-target="#track-list-table" class="w-full pl-6 pr-4 py-2 rounded-full bg-black text-white focus:outline-none focus:ring-2 focus:ring-blue-500"/>
     </div>
   |]
 
@@ -75,7 +84,7 @@ trackListTable :: [Music] -> Html.Html
 trackListTable tracks =
   [hsx|
     <div class="min-h-[30%] overflow-x-auto bg-gradient-to-b to-indigo-900 from-10% to-90%">
-        <table class="w-full text-left border-collapse">
+        <table id="track-list-table" class="w-full text-left border-collapse">
             <thead class="text-xs font-semibold uppercase bg-transparent">
                 <tr>
                     <th class="p-2">Track</th>

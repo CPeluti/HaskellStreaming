@@ -28,18 +28,12 @@ import Text.Blaze.Html5 as H
 import Text.Read (readMaybe)
 import Views.Pages.FileUploadPage (fileUploadPage)
 import Views.Pages.LoginPage (loginPage)
-import Views.Pages.MusicPlayer.MusicPlayerPage (musicPlayerPage)
+import Views.Pages.MusicPlayer.MusicPlayerPage (musicPlayerPage, trackListTable)
 import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
 import Web.Scotty as Scotty
 import Data.Time (getCurrentTime)
-
--- hxPost :: AttributeValue -> Attribute
--- hxPost = customAttribute "hx-post"
--- hxSwap :: AttributeValue -> Attribute
--- hxSwap = customAttribute "hx-swap"
-
--- myButton :: Html
--- myButton = button ! hxPost "/clicked" ! hxSwap "outerHTML" $ "Click me"
+import qualified Data.ByteString.Char8 as BC
+import Data.List (isInfixOf)
 
 baseHtml :: (IHP.HSX.ToHtml.ToHtml a) => a -> Html
 baseHtml bodyContent =
@@ -124,7 +118,12 @@ streamingBD s =
           _ <- liftIO (writeBuilder (byteString aux))
           liftIO flush
 
---
+
+
+filterTracks :: ByteString -> [Music] -> [Music]
+filterTracks query tracks =
+  let queryString = BC.unpack query
+  in Prelude.filter (\track -> queryString `Data.List.isInfixOf` musicName track) tracks
 
 restApi :: [Playlist] -> [Music] -> IO ()
 restApi playlists tracks = do
@@ -168,16 +167,22 @@ restApi playlists tracks = do
       filePath <- Scotty.param "filePath"
       name <- Scotty.param "name"
       author <- Scotty.param "author"
-  
+
       -- Use current time as a placeholder for releaseDate
       currentTime <- liftIO getCurrentTime
 
-      -- Assuming placeholder values for album, fileSize, and fileLength
       let album = "Unknown Album"
       let fileSize = 0  -- Placeholder value for file size
       let fileLength = 0  -- Placeholder value for file length
 
       let currentTrack = Music filePath name author currentTime album fileSize fileLength currentTime
 
-      -- Respond with the updated CurrentlyPlayingBar
       Scotty.html $ renderHtml $ currentlyPlayingBar currentTrack
+    Scotty.get "/search-tracks" $ do
+      query <- Scotty.param "searchQuery" `Scotty.rescue` \_ -> return ""
+      let filteredTracks = filterTracks query tracks
+
+      -- Print the length of the filtered tracks array to the console
+      liftIO $ putStrLn $ "Number of filtered tracks: " ++ show (Prelude.length filteredTracks)
+
+      Scotty.html $ renderHtml $ trackListTable filteredTracks
