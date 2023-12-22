@@ -16,19 +16,26 @@
 
 
 
-module DatabaseHaspotifaskell where
+module DatabaseHaspotifaskell 
+    ( runDb
+    , User(..), Music(..), Playlist(..), Relation, migrateAll
+    , insertPlaylist, updatePlaylistName, deletePlaylist, selectPlaylistByAuthor, selectPlaylistByName, selectAllPlaylists
+    , insertUser, updateUserName, updateUserEmail, updateUserPassword, deleteUser, selectAllUsers
+    , insertMusic, updateMusicName, updateMusicFilePath, updateMusicAuthor, updateMusicReleaseDate, updateMusicAlbum, updateMusicFileSize, updateMusicLength, deleteMusic, selectMusicByAuthor, selectMusicByName, selectMusicByAlbum, selectMusicByRelesate, selectAllSongs
+    , insertRelation, deleteRelation, selectRelationByMusic, selectRelationByPlaylist
+    ) where
 
 import            Control.Monad.Trans.Resource
 import Control.Monad.Logger
-import qualified Database.Esqueleto as E
+-- import qualified Database.Esqueleto as E
 import           Database.Persist
 import           Database.Persist.Sqlite
 import           Database.Persist.TH
-import           Data.ByteString
+-- import           Data.ByteString
 import           Data.Time
 import           Control.Monad.IO.Class
-import           System.Posix.Types (UserID)
-import Database.Persist.Sql
+-- import           System.Posix.Types (UserID)
+-- import Database.Persist.Sql
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
   User
