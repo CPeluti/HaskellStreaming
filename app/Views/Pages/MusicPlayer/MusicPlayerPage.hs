@@ -8,10 +8,7 @@ import IHP.HSX.QQ (hsx)
 import qualified Text.Blaze.Html as Html
 import qualified Views.Layouts as Layouts
 import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
-import DatabaseHaspotifaskell (User(..), Music(..), Playlist(..), insertUser)
-import Data.Time.Clock (getCurrentTime)
-import Database.Persist.Sql (SqlPersistT)
-import Control.Monad.IO.Class (liftIO)
+import DatabaseHaspotifaskell (Music(..), Playlist(..))
 import Data.Time.Format (formatTime, defaultTimeLocale)
 import Text.Printf (printf)
 
@@ -26,7 +23,6 @@ musicPlayerPage dummyPlaylists dummyTracks =
             var audio = document.getElementById(audioId);
             var playIcon = document.getElementById('play-icon');
             var pauseIcon = document.getElementById('pause-icon');
-
             if (audio.paused) {
                 audio.play();
                 playIcon.style.display = 'none';
@@ -42,7 +38,7 @@ musicPlayerPage dummyPlaylists dummyTracks =
         {sidebar dummyPlaylists}
         <div class="flex flex-col flex-grow">
             {mainContent dummyTracks}
-            {currentlyPlayingBar}
+            {currentlyPlayingBar (head dummyTracks)}
         </div>
     </div>
 |]
@@ -120,7 +116,7 @@ renderPlaylist (Playlist name authorId created) =
   |]
 
 renderTrack :: Music -> Html.Html
-renderTrack (Music filePath name author releaseDate album fileSize length _) =
+renderTrack (Music _filePath name author releaseDate album fileSize fileLength _) =
   [hsx|
     <tr class="hover:bg-gray-800">
         <td class="p-2">{name}</td>
@@ -128,7 +124,7 @@ renderTrack (Music filePath name author releaseDate album fileSize length _) =
         <td class="p-2">{author}</td>
         <td class="p-2">{formatTime defaultTimeLocale "%Y-%m-%d" releaseDate}</td>
         <td class="p-2">{show fileSize} KB</td>
-        <td class="p-2">{formatDuration length}</td>
+        <td class="p-2">{formatDuration fileLength}</td>
     </tr>
   |]
 

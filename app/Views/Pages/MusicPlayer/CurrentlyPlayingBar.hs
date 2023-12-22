@@ -5,14 +5,33 @@ module Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar) where
 
 import IHP.HSX.QQ (hsx)
 import qualified Text.Blaze.Html as Html
-import qualified Views.Layouts as Layouts
+import DatabaseHaspotifaskell
 
-audioPlayer :: Html.Html
-audioPlayer =
+currentlyPlayingBar :: Music -> Html.Html
+currentlyPlayingBar (Music filePath name author _ _ _ _length _) =
+  [hsx|
+    <div class="bg-gray-800 p-4 flex lg:flex-row flex-col lg:fixed lg:inset-x-0 lg:bottom-0 w-full justify-between">
+        <!-- Left Section: Song Information -->
+        {songInformation "/assets/imagine.jpeg" name author}
+
+        <!-- Middle Section: Play Controls and Progress Bar -->
+        <div class="flex-1 min-w-0">
+            {audioPlayer filePath}
+           <!-- {_soundControls} -->
+           <!-- {_progressBar}   -->
+        </div>
+
+        <!-- Right Section: Sound Volume Control -->
+      <!--{_volumeControls} -->
+    </div>
+  |]
+
+audioPlayer :: String -> Html.Html
+audioPlayer filePath =
   [hsx|
     <div class="p-4 rounded-lg shadow flex flex-col items-center">
         <audio controls id="player" class="min-w-[75%]">
-            <source src="/music" type="audio/mpeg"/>
+            <source src={filePath} type="audio/mpeg"/>
             Your browser does not support the audio element.
         </audio>
     </div>
@@ -80,22 +99,3 @@ _soundControls =
     </div>
   |]
 
--- Update currentlyPlayingBar to use refactored components
-currentlyPlayingBar :: Html.Html
-currentlyPlayingBar =
-  [hsx|
-    <div class="bg-gray-800 p-4 flex lg:flex-row flex-col lg:fixed lg:inset-x-0 lg:bottom-0 w-full justify-between">
-        <!-- Left Section: Song Information -->
-        {songInformation "/assets/imagine.jpeg" "Nome da Musica" "Autor"}
-
-        <!-- Middle Section: Play Controls and Progress Bar -->
-        <div class="flex-1 min-w-0">
-            {audioPlayer}
-            <!-- {_soundControls} -->
-            <!-- {_progressBar} -->
-        </div>
-
-        <!-- Right Section: Sound Volume Control -->
-        <!-- {_volumeControls} -->
-    </div>
-  |]
