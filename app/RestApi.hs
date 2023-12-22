@@ -47,6 +47,9 @@ import           ModelsJson
 
 import            Data.Int
 
+import           Data.Time
+
+
 import Control.Exception.Lifted
 
 
@@ -165,21 +168,20 @@ restApi =
 
 
     get "/music/:id" $ do
-      (idValue :: MusicId) <- Scotty.param "id"
-      music <- liftIO $ runDb $ DB.get idValue
-      case music of
-        Just (Entity musicId musicFromDb) -> liftIO $ print musicFromDb
-        _ -> throw 404
-      startRange <- parseStart <$> Scotty.header "range"
-      endRange <- parseEnd <$> Scotty.header "range"
-      absolutePath <- liftIO $ getAbsolutePath fPathRelative
-      totalSize <- liftIO $ fileSize absolutePath
+      (idValue :: Int64) <- Scotty.param "id"
+      (music :: Maybe Music) <- liftIO $ runDb $ DB.get $ DB.toSqlKey $ idValue
+      liftIO $ print music
+      Scotty.text "foi"
+      -- startRange <- parseStart <$> Scotty.header "range"
+      -- endRange <- parseEnd <$> Scotty.header "range"
+      -- absolutePath <- liftIO $ getAbsolutePath fPathRelative
+      -- totalSize <- liftIO $ fileSize absolutePath
 
-      Scotty.status status206
-      Scotty.setHeader "Content-Type" "audio/mpeg"
-      Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
-      Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
-      Scotty.stream $ streamingBD $ generateStream absolutePath
+      -- Scotty.status status206
+      -- Scotty.setHeader "Content-Type" "audio/mpeg"
+      -- Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
+      -- Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
+      -- Scotty.stream $ streamingBD $ generateStream absolutePath
     get "/musicPage" $ do
       -- users <- liftIO $ runDb $ selectAllUsers
       -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users

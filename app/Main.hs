@@ -54,9 +54,6 @@ main = do
   -- playlistsAna <- selectPlaylistByAuthor "Ana"
   -- liftIO $ mapM_ (\(Entity _ playlist) -> putStrLn $ "Nome: " ++ playlistName playlist ++ " Autor: " ++ playlistAuthor playlist) playlistsAna
 
-  -- let releaseDate = UTCTime (fromGregorian 2018 06 21) 0
-  -- idMusic <- insertMusic "FilePath" "musica" "autor" releaseDate "album" 20 3
-
   -- updateMusicName idMusic "novo nome"
   -- updateMusicAuthor idMusic "novo autor"
   -- updateMusicAlbum idMusic "novo album"
