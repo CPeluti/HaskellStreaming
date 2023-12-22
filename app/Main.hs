@@ -40,9 +40,11 @@ createDummyData = do
           Playlist "Playlist 3" mockUserId currentTime
         ]
   let dummyTracks =
-        [ Music "./assets/virtual_insanity.mp3" "Track 1" "Artist 1" currentTime "Album 1" 320000 180 currentTime,
-          Music "./assets/paint_it_black.mp3" "Track 2" "Artist 2" currentTime "Album 2" 320000 180 currentTime,
-          Music "./assets/dont_stop_me_now.mp3" "Track 3" "Artist 3" currentTime "Album 3" 320000 180 currentTime
+        [ Music "./assets/virtual_insanity.mp3" "Virtual Insanity" "Jamiroquai" currentTime "Travelling Without Moving" 5000 329 currentTime,
+          Music "./assets/paint_it_black.mp3" "Paint It Black" "The Rolling Stones" currentTime "Aftermath" 4000 202 currentTime,
+          Music "./assets/dont_stop_me_now.mp3" "Don't Stop Me Now" "Queen" currentTime "Jazz" 6000 210 currentTime
+          -- Music "./assets/stairway_to_heaven.mp3" "Stairway to Heaven" "Led Zeppelin" currentTime "Led Zeppelin IV" 5500 482 currentTime,
+          -- Music "./assets/bohemian_rhapsody.mp3" "Bohemian Rhapsody" "Queen" currentTime "A Night at the Opera" 6200 354 currentTime
         ]
   return (dummyPlaylists, dummyTracks)
 
