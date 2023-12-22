@@ -62,6 +62,7 @@ executable server-exe
   other-modules:
       DatabaseHaspotifaskell
       RestApi
+      Utils
       Views.Common
       Views.Layouts
       Views.Pages.FileUploadPage
