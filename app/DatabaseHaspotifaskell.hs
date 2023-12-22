@@ -17,8 +17,9 @@ import           Database.Persist
 import           Database.Persist.Sqlite
 import           Database.Persist.TH
 import           Data.Time
+import           Data.Int
 import           Control.Monad.IO.Class
-import Models
+import           Models
 
 
 -- FUNCOES PLAYLIST
@@ -51,6 +52,12 @@ selectAllPlaylists :: (MonadIO m) => SqlPersistT m [Entity Playlist]
 selectAllPlaylists = do
   selectList [] [Asc PlaylistId]
 
+selectPlaylistById :: (MonadIO m) => Key Playlist -> SqlPersistT m (Maybe Playlist)
+selectPlaylistById = get
+
+selectPlaylistByIdInt :: (MonadIO m) => Int64 -> SqlPersistT m (Maybe Playlist)
+selectPlaylistByIdInt idValue = get $ toSqlKey idValue
+
 -- FUNCOES USER
 insertUser :: (MonadIO m) => String -> String -> String -> String -> SqlPersistT m (Key User)
 insertUser uEmail uFirstName uLastName uPassword = do
@@ -71,6 +78,12 @@ deleteUser = delete
 selectAllUsers :: (MonadIO m) => SqlPersistT m [Entity User]
 selectAllUsers = do
   selectList [] [Asc UserId]
+
+selectUserById :: (MonadIO m) => Key User -> SqlPersistT m (Maybe User)
+selectUserById = get
+
+selectUserByIdInt :: (MonadIO m) => Int64 -> SqlPersistT m (Maybe User)
+selectUserByIdInt idValue = get $ toSqlKey idValue
 
 -- FUNCOES MUSICAS
 insertMusic :: (MonadIO m) => String -> String -> String -> UTCTime -> String -> Int -> Int -> SqlPersistT m (Key Music)
@@ -116,6 +129,12 @@ selectMusicByRelesate wantedDate = selectList [MusicReleaseDate ==. wantedDate] 
 selectAllSongs :: (MonadIO m) => SqlPersistT m [Entity Music]
 selectAllSongs = do
   selectList [] [Asc MusicId]
+
+selectMusicById :: (MonadIO m) => Key Music -> SqlPersistT m (Maybe Music)
+selectMusicById = get
+
+selectMusicByIdInt :: (MonadIO m) => Int64 -> SqlPersistT m (Maybe Music)
+selectMusicByIdInt idValue = get $ toSqlKey idValue
 
 -- FUNCOES RELATION
 insertRelation :: (MonadIO m) => Key Playlist -> Key Music -> SqlPersistT m (Key Relation)
