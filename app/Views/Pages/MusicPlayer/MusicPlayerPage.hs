@@ -17,7 +17,8 @@ import Text.Printf (printf)
 musicPlayerPage :: [Playlist] -> [Music] -> Html.Html
 musicPlayerPage dummyPlaylists dummyTracks =
   Layouts.mainLayout
-    [hsx|
+    [hsx| 
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
         <script>
         function togglePlayPause(audioId) {
             var audio = document.getElementById(audioId);
@@ -54,7 +55,7 @@ mainContent tracks =
   |]
 
 albumCoverSection :: Html.Html
-albumCoverSection = 
+albumCoverSection =
   [hsx|
     <div class="p-8 flex flex-col lg:flex-row items-center bg-gradient-to-r from-indigo-500">
         <!-- Album Cover -->
@@ -116,8 +117,9 @@ renderPlaylist (Playlist name authorId created) =
   |]
 
 renderTrack :: Music -> Html.Html
-renderTrack (Music _filePath name author releaseDate album fileSize fileLength _) =
-  [hsx|
+renderTrack (Music filePath name author releaseDate album fileSize fileLength _) =
+  let hxVals = "{\"filePath\": \"" ++ filePath ++ "\", \"name\": \"" ++ name ++ "\", \"author\": \"" ++ author ++ "\"}"
+  in [hsx|
     <tr class="hover:bg-gray-800">
         <td class="p-2">{name}</td>
         <td class="p-2">{album}</td>
@@ -125,6 +127,11 @@ renderTrack (Music _filePath name author releaseDate album fileSize fileLength _
         <td class="p-2">{formatTime defaultTimeLocale "%Y-%m-%d" releaseDate}</td>
         <td class="p-2">{show fileSize} KB</td>
         <td class="p-2">{formatDuration fileLength}</td>
+        <td class="p-2">
+            <button hx-post="/changeTrack" hx-vals={hxVals} hx-target="#currently-playing-bar">
+                Play
+            </button>
+        </td>
     </tr>
   |]
 

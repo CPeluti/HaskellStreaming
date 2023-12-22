@@ -10,19 +10,21 @@ import DatabaseHaspotifaskell
 currentlyPlayingBar :: Music -> Html.Html
 currentlyPlayingBar (Music filePath name author _ _ _ _length _) =
   [hsx|
-    <div class="bg-gray-800 p-4 flex lg:flex-row flex-col lg:fixed lg:inset-x-0 lg:bottom-0 w-full justify-between">
-        <!-- Left Section: Song Information -->
-        {songInformation "/assets/imagine.jpeg" name author}
+    <div id="currently-playing-bar">
+      <div class="bg-gray-800 p-4 flex lg:flex-row flex-col lg:fixed lg:inset-x-0 lg:bottom-0 w-full justify-between">
+          <!-- Left Section: Song Information -->
+          {songInformation "/assets/imagine.jpeg" name author}
 
-        <!-- Middle Section: Play Controls and Progress Bar -->
-        <div class="flex-1 min-w-0">
-            {audioPlayer filePath}
-           <!-- {_soundControls} -->
-           <!-- {_progressBar}   -->
-        </div>
+          <!-- Middle Section: Play Controls and Progress Bar -->
+          <div class="flex-1 min-w-0">
+              {audioPlayer filePath}
+             <!-- {_soundControls} -->
+             <!-- {_progressBar}   -->
+          </div>
 
-        <!-- Right Section: Sound Volume Control -->
-      <!--{_volumeControls} -->
+          <!-- Right Section: Sound Volume Control -->
+        <!--{_volumeControls} -->
+      </div>
     </div>
   |]
 
