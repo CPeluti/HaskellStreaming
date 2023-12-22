@@ -23,8 +23,9 @@ import qualified Streaming.Prelude as S
 import System.Directory (getCurrentDirectory)
 import Text.Blaze.Html5 as H
 import Text.Read (readMaybe)
-import qualified Data.ByteString.Char8 as BC
-import Data.List (isInfixOf)
+import Data.ByteString.Char8 as BC
+-- import Text.FuzzyFind (bestMatch, Alignment(..))
+import Text.FuzzyFind (bestMatch)
 
 baseHtml :: (IHP.HSX.ToHtml.ToHtml a) => a -> Html
 baseHtml bodyContent =
@@ -109,10 +110,13 @@ streamingBD s =
           _ <- liftIO (writeBuilder (byteString aux))
           liftIO flush
 
-
-
 filterTracks :: ByteString -> [Music] -> [Music]
 filterTracks query tracks =
   let queryString = BC.unpack query
-  in Prelude.filter (\track -> queryString `Data.List.isInfixOf` musicName track) tracks
+  in Prelude.filter (isFuzzyMatch queryString . musicName) tracks
 
+isFuzzyMatch :: String -> String -> Bool
+isFuzzyMatch query trackName =
+  case bestMatch query trackName of
+    Just _alignment -> True  -- or use 'score' from 'Alignment' to set a threshold
+    Nothing -> False

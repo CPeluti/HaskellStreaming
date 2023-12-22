@@ -81,7 +81,4 @@ restApi playlists tracks = do
       query <- Scotty.param "searchQuery" `Scotty.rescue` \_ -> return ""
       let filteredTracks = filterTracks query tracks
 
-      -- Print the length of the filtered tracks array to the console
-      liftIO $ putStrLn $ "Number of filtered tracks: " ++ show (Prelude.length filteredTracks)
-
       Scotty.html $ renderHtml $ trackListTable filteredTracks
