@@ -10,8 +10,8 @@ import Data.ByteString as B
 import Data.ByteString.Builder (byteString)
 import Data.Foldable (for_)
 import qualified Data.Text.Lazy as T
-import Database.Persist (Entity (..))
-import qualified Database.Persist (Entity)
+-- import Database.Persist (Entity (..))
+-- import qualified Database.Persist (Entity)
 import DatabaseHaspotifaskell
 import IHP.HSX.ConvertibleStrings ()
 import IHP.HSX.QQ
@@ -28,7 +28,7 @@ import Text.Blaze.Html5 as H
 import Text.Read (readMaybe)
 import Views.Pages.FileUploadPage (fileUploadPage)
 import Views.Pages.LoginPage (loginPage)
-import Views.Pages.MusicPlayerPage (musicPlayerPage)
+import Views.Pages.MusicPlayer.MusicPlayerPage (musicPlayerPage)
 import Web.Scotty as Scotty
 
 -- hxPost :: AttributeValue -> Attribute
@@ -160,5 +160,5 @@ restApi playlists tracks = do
       Scotty.stream $ streamingBD $ generateStream absolutePath
     get "/musicPage" $ do
       -- users <- liftIO $ runDb $ selectAllUsers
-      liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
+      -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
       Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks
