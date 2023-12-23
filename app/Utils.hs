@@ -27,6 +27,7 @@ import Data.ByteString.Char8 as BC
 -- import Text.FuzzyFind (bestMatch, Alignment(..))
 import Text.FuzzyFind (bestMatch)
 import Data.Time
+import Database.Persist (Entity(..))
 
 timeFormat = "%Y-%-m-%-d"
 understandTime:: String -> UTCTime
@@ -58,10 +59,6 @@ componentButton = button
 
 dbData :: [Integer]
 dbData = [1 .. 4]
-
--- fPathRelative :: FilePath
--- fPathRelative = "virtual_insanity_jamiroquai.mp3"
--- fPathRelative = "src/eBG7P-K-r1Y_160.mp3"
 
 -- Function to get the absolute path
 getAbsolutePath :: FilePath -> IO FilePath
@@ -99,8 +96,6 @@ checkStart (Just x) = x
 parseInt :: String -> Maybe Int
 parseInt s = readMaybe s :: Maybe Int
 
---
-
 -- TODO: Refatorar
 generateRange :: Int -> Int -> String
 generateRange partial_start partial_end = "bytes " ++ show partial_start ++ "-" ++ show partial_end ++ "/" ++ show (partial_end - partial_start + 1)
@@ -115,10 +110,11 @@ streamingBD s =
           _ <- liftIO (writeBuilder (byteString aux))
           liftIO flush
 
-filterTracks :: ByteString -> [Music] -> [Music]
-filterTracks query tracks =
+
+filterTracks :: ByteString -> [Entity Music] -> [Entity Music]
+filterTracks query entityTracks =
   let queryString = BC.unpack query
-  in Prelude.filter (isFuzzyMatch queryString . musicName) tracks
+  in Prelude.filter (isFuzzyMatch queryString . musicName . entityVal) entityTracks
 
 isFuzzyMatch :: String -> String -> Bool
 isFuzzyMatch query trackName =

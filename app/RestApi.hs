@@ -61,26 +61,22 @@ import Utils (understandTime, baseHtml, dbData, componentButton, parseStart, par
 import Control.Exception.Lifted
 
 musicFolder = "musics/"
-restApi :: [Playlist] -> [Music] -> IO ()
-restApi playlists tracks = do
+restApi :: IO ()
+restApi  = do
   scotty 3000 $ do
     middleware static
-    Scotty.get "/" $
-      Scotty.html $
-        renderHtml $
-          baseHtml loginPage
+    get "/" $ do
+      -- users <- liftIO $ runDb $ selectAllUsers
+      -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
+      tracks <- liftIO $ runDb selectAllSongs
+      playlists <- liftIO $ runDb selectAllPlaylists
+      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks
     post "/clicked" $
       Scotty.html $
         renderHtml $
           H.div $
             for_ (Prelude.map show dbData) $ \id ->
               componentButton $ toHtml id
-    post "/login" $ do
-      username <- Scotty.param "username"
-      password <- Scotty.param "password"
-      liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
-      -- TODO: implement authentication
-      Scotty.redirect "/musicPage"
 
     Scotty.get "/uploadPage" $ do
       Scotty.html $ renderHtml $ baseHtml fileUploadPage
@@ -102,8 +98,7 @@ restApi playlists tracks = do
           Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
           Scotty.stream $ streamingBD $ generateStream absolutePath
         Nothing -> Scotty.status status404
-    get "/musicPage" $ do
-      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks
+      -- liftIO $ print $ MusicName $ entityVal music
     
     -- post "/playlist/:id" $ do
     --   (idPlaylist :: Int64) <- Scotty.param "id"
@@ -186,7 +181,10 @@ restApi playlists tracks = do
       Scotty.html $ renderHtml $ currentlyPlayingBar currentTrack
 
     Scotty.get "/search-tracks" $ do
+    
       query <- Scotty.param "searchQuery" `Scotty.rescue` \_ -> return ""
+
+      tracks <- liftIO $ runDb selectAllSongs
       let filteredTracks = filterTracks query tracks
 
       Scotty.html $ renderHtml $ trackListTable filteredTracks
