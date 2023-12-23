@@ -11,6 +11,7 @@ import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
 import DatabaseHaspotifaskell (Music(..), Playlist(..))
 import Data.Time.Format (formatTime, defaultTimeLocale)
 import Text.Printf (printf)
+import Data.Maybe (listToMaybe)
 
 -- import qualified Views.Common as Common
 
@@ -37,12 +38,29 @@ musicPlayerPage dummyPlaylists dummyTracks =
         </script>
         <div class="flex flex-col lg:flex-row h-screen bg-gray-900 text-white">
         {sidebar dummyPlaylists}
-        <div class="flex flex-col flex-grow">
-            {mainContent dummyTracks}
-            {currentlyPlayingBar (head dummyTracks)}
+          <div class="flex flex-col flex-grow">
+              {mainContent dummyTracks}
+              {maybeCurrentlyPlayingBar (listToMaybe dummyTracks)}
+          </div>
+        </div>
+|]
+
+-- Function to display when there are no tracks playing
+maybeCurrentlyPlayingBar :: Maybe Music -> Html.Html
+maybeCurrentlyPlayingBar (Just track) = currentlyPlayingBar track
+maybeCurrentlyPlayingBar Nothing       = 
+  [hsx|
+    <div class="flex items-center justify-center h-full">
+        <div class="text-center p-10">
+            <div class="mb-4">
+                <!-- Cartoon cat with headphones image -->
+                <img src="https://www.neonvibes.co.uk/cdn/shop/products/Nothing-to-see-hereneonvibes.co.ukLEDneonsignsMadeintheUK_2000x.jpg?v=1677846952" alt="No Music Cat" class="mx-auto" style="width: 200px; height: auto;"/>
+            </div>
+            <h2 class="text-xl font-semibold text-gray-300">Oops, no tunes here!</h2>
+            <p class="text-gray-400">Looks like the music took a break. Why not start something groovy?</p>
         </div>
     </div>
-|]
+  |]
 
 
 mainContent :: [Music] -> Html.Html
