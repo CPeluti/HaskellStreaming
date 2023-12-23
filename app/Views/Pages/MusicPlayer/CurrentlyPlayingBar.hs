@@ -13,7 +13,7 @@ currentlyPlayingBar (Music filePath name author _ _ _ _length) =
     <div id="currently-playing-bar">
       <div class="bg-gray-800 p-4 flex lg:flex-row flex-col lg:fixed lg:inset-x-0 lg:bottom-0 w-full justify-between">
           <!-- Left Section: Song Information -->
-          {songInformation "/assets/imagine.jpeg" name author}
+          {songInformation name author}
 
           <!-- Middle Section: Play Controls and Progress Bar -->
           <div class="flex-1 min-w-0">
@@ -52,11 +52,10 @@ playButton my_id =
     </button>
 |]
 
-songInformation :: String -> String -> String -> Html.Html
-songInformation coverImageUrl songName artistName =
+songInformation :: String -> String -> Html.Html
+songInformation songName artistName =
   [hsx|
     <div class="flex items-center mb-4 lg:mb-0">
-        <img src={coverImageUrl} alt="Song cover" class="w-16 h-16 mr-4"/>
         <div>
             <div class="text-lg">{songName}</div>
             <div>{artistName}</div>

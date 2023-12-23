@@ -14,7 +14,7 @@ import Text.Printf (printf)
 import Data.Maybe (listToMaybe)
 
 musicPlayerPage :: [Entity Playlist] -> [Entity Music] -> Html.Html
-musicPlayerPage dummyPlaylists entityTracks =
+musicPlayerPage _dummyPlaylists entityTracks =
   Layouts.mainLayout
     [hsx| 
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -35,7 +35,7 @@ musicPlayerPage dummyPlaylists entityTracks =
         }
         </script>
         <div class="flex flex-col lg:flex-row h-screen bg-gray-900 text-white">
-        {sidebar dummyPlaylists}
+        <!-- {sidebar dummyPlaylists} -->
           <div class="flex flex-col flex-grow">
               {mainContent entityTracks}
               {maybeCurrentlyPlayingBar (listToMaybe entityTracks)}
@@ -80,7 +80,7 @@ albumCoverSection :: Html.Html
 albumCoverSection =
   [hsx|
     <div class="p-8 flex flex-col lg:flex-row items-center bg-gradient-to-r from-indigo-500">
-        <img src="/assets/imagine.jpeg" alt="Song cover" class="w-48 h-48 mr-8 mb-4 lg:mb-0 shadow-lg rounded-lg"/>
+        <img src="/assets/haspotifaskell.png" alt="Song cover" class="w-48 h-48 mr-8 mb-4 lg:mb-0 shadow-lg rounded-lg"/>
         <div class="text-center lg:text-left">
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Playlist 1</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400">A selection of your favorite tracks</p>
@@ -94,16 +94,16 @@ albumCoverSection =
 trackListTable :: [Entity Music] -> Html.Html
 trackListTable entityTracks =
   [hsx|
-    <div class="min-h-[30%] overflow-x-auto bg-gradient-to-b to-indigo-900 from-10% to-90%">
+    <div class="min-h-[30%] overflow-x-auto bg-gradient-to-b to-indigo-900 from-10% to-90% my-4 mx-2">
         <table id="track-list-table" class="w-full text-left border-collapse">
             <thead class="text-xs font-semibold uppercase bg-transparent">
                 <tr>
-                    <th class="p-2">Track</th>
-                    <th class="p-2">Album</th>
-                    <th class="p-2">Author</th>
-                    <th class="p-2">Release Date</th>
-                    <th class="p-2">File Size</th>
-                    <th class="p-2">Length</th>
+                    <th class="py-3 px-4">Track</th>
+                    <th class="py-3 px-4">Album</th>
+                    <th class="py-3 px-4">Author</th>
+                    <th class="py-3 px-4">Release Date</th>
+                    <th class="py-3 px-4">File Size</th>
+                    <th class="py-3 px-4">Length</th>
                 </tr>
             </thead>
             <tbody class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
@@ -113,30 +113,26 @@ trackListTable entityTracks =
     </div>
   |]
 
-sidebar :: [Entity Playlist] -> Html.Html
-sidebar entityPlaylists =
-  [hsx|
-    <div class="bg-black lg:w-64 w-full h-20 lg:h-screen overflow-y-auto lg:overflow-hidden">
-        <div class="text-white p-5 hidden lg:block">Minha Biblioteca</div>
-        <ul class="flex lg:flex-col overflow-x-auto lg:overflow-x-hidden">
-            {mapM_ renderPlaylist entityPlaylists}
-        </ul>
-    </div>
-  |]
+-- sidebar :: [Entity Playlist] -> Html.Html
+-- sidebar entityPlaylists =
+--   [hsx|
+--     <div class="bg-black lg:w-64 w-full h-20 lg:h-screen overflow-y-auto lg:overflow-hidden">
+--         <div class="text-white p-5 hidden lg:block">Minha Biblioteca</div>
+--         <ul class="flex lg:flex-col overflow-x-auto lg:overflow-x-hidden">
+--             {mapM_ renderPlaylist entityPlaylists}
+--         </ul>
+--     </div>
+--   |]
 
 -- Now takes an Entity Playlist and extracts the Playlist from it
-renderPlaylist :: Entity Playlist -> Html.Html
-renderPlaylist (Entity _ (Playlist name authorId)) =
-
-
-renderPlaylist :: Playlist -> Html.Html
-renderPlaylist (Playlist name) =
-  [hsx|
-    <li class="p-2 hover:bg-gray-800 lg:block">
-        <div>{name}</div>
-        <div class="text-xs text-gray-400">Created by {authorId}</div>
-    </li>
-  |]
+-- renderPlaylist :: Entity Playlist -> Html.Html
+-- renderPlaylist (Entity _ (Playlist name authorId)) =
+--   [hsx|
+--     <li class="p-2 hover:bg-gray-800 lg:block">
+--         <div>{name}</div>
+--         <div class="text-xs text-gray-400">Created by {authorId}</div>
+--     </li>
+--   |]
 
 renderTrack :: Entity Music -> Html.Html
 renderTrack (Entity _ (Music filePath name author releaseDate album fileSize fileLength)) =
