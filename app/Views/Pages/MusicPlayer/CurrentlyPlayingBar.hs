@@ -32,7 +32,7 @@ audioPlayer :: String -> Html.Html
 audioPlayer filePath =
   [hsx|
     <div class="p-4 rounded-lg shadow flex flex-col items-center">
-        <audio controls id="player" class="min-w-[75%]">
+        <audio controls autoplay id="player" class="min-w-[75%]">
             <source src={filePath} type="audio/mpeg"/>
             Your browser does not support the audio element.
         </audio>

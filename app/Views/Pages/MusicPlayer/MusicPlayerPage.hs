@@ -146,8 +146,8 @@ renderTrack (Entity _ (Music filePath name author releaseDate album fileSize fil
         <td class="p-2">{show fileSize} KB</td>
         <td class="p-2">{formatDuration fileLength}</td>
         <td class="p-2">
-            <button hx-post="/changeTrack" hx-vals={hxVals} hx-target="#currently-playing-bar">
-                Play
+            <button hx-post="/changeTrack" hx-vals={hxVals} hx-target="#currently-playing-bar" class="icon-button">
+                <i class="fa fa-play"></i>
             </button>
         </td>
     </tr>
