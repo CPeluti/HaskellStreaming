@@ -79,22 +79,17 @@ restApi :: [Playlist] -> [Entity Music] -> IO ()
 restApi playlists tracks = do
   scotty 3000 $ do
     middleware static
-    Scotty.get "/" $
-      Scotty.html $
-        renderHtml $
-          baseHtml loginPage
+    get "/" $ do
+      -- users <- liftIO $ runDb $ selectAllUsers
+      -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
+      dbTracks <- liftIO $ runDb selectAllSongs
+      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists dbTracks
     post "/clicked" $
       Scotty.html $
         renderHtml $
           H.div $
             for_ (Prelude.map show dbData) $ \id ->
               componentButton $ toHtml id
-    post "/login" $ do
-      username <- Scotty.param "username"
-      password <- Scotty.param "password"
-      liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
-      -- TODO: implement authentication
-      Scotty.redirect "/musicPage"
 
     Scotty.get "/uploadPage" $ do
       Scotty.html $ renderHtml $ baseHtml fileUploadPage
@@ -117,11 +112,6 @@ restApi playlists tracks = do
           Scotty.stream $ streamingBD $ generateStream absolutePath
         Nothing -> Scotty.status status404
       -- liftIO $ print $ MusicName $ entityVal music
-    get "/musicPage" $ do
-      -- users <- liftIO $ runDb $ selectAllUsers
-      -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
-      dbTracks <- liftIO $ runDb selectAllSongs
-      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists dbTracks
     
     post "/music" $ do
       fs <- files

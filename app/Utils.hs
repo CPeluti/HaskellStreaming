@@ -60,10 +60,6 @@ componentButton = button
 dbData :: [Integer]
 dbData = [1 .. 4]
 
--- fPathRelative :: FilePath
--- fPathRelative = "virtual_insanity_jamiroquai.mp3"
--- fPathRelative = "src/eBG7P-K-r1Y_160.mp3"
-
 -- Function to get the absolute path
 getAbsolutePath :: FilePath -> IO FilePath
 getAbsolutePath anyRelativePath = do
@@ -99,8 +95,6 @@ checkStart (Just x) = x
 
 parseInt :: String -> Maybe Int
 parseInt s = readMaybe s :: Maybe Int
-
---
 
 -- TODO: Refatorar
 generateRange :: Int -> Int -> String
