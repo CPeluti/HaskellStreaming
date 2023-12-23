@@ -59,13 +59,7 @@ main :: IO ()
 main = do
   runDb $ runMigration migrateAll
 
-  dbTracks <- runDb selectAllSongs
-
-  -- Print each track in dbTracks
-  -- mapM_ (print . entityVal) dbTracks
-
-  (playlists, _tracks) <- runDb createDummyData
-  liftIO $ restApi playlists dbTracks
+  liftIO $ restApi
 
   -- idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
   -- idUser2 <- insertUser "testeteste@gmail.com" "testeteste" "tt" "senhaa"

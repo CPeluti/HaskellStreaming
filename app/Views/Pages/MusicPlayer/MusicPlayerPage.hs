@@ -13,7 +13,7 @@ import Data.Time.Format (formatTime, defaultTimeLocale)
 import Text.Printf (printf)
 import Data.Maybe (listToMaybe)
 
-musicPlayerPage :: [Playlist] -> [Entity Music] -> Html.Html
+musicPlayerPage :: [Entity Playlist] -> [Entity Music] -> Html.Html
 musicPlayerPage dummyPlaylists entityTracks =
   Layouts.mainLayout
     [hsx| 
@@ -113,19 +113,20 @@ trackListTable entityTracks =
     </div>
   |]
 
-sidebar :: [Playlist] -> Html.Html
-sidebar playlists =
+sidebar :: [Entity Playlist] -> Html.Html
+sidebar entityPlaylists =
   [hsx|
     <div class="bg-black lg:w-64 w-full h-20 lg:h-screen overflow-y-auto lg:overflow-hidden">
         <div class="text-white p-5 hidden lg:block">Minha Biblioteca</div>
         <ul class="flex lg:flex-col overflow-x-auto lg:overflow-x-hidden">
-            {mapM_ renderPlaylist playlists}
+            {mapM_ renderPlaylist entityPlaylists}
         </ul>
     </div>
-|]
+  |]
 
-renderPlaylist :: Playlist -> Html.Html
-renderPlaylist (Playlist name authorId) =
+-- Now takes an Entity Playlist and extracts the Playlist from it
+renderPlaylist :: Entity Playlist -> Html.Html
+renderPlaylist (Entity _ (Playlist name authorId)) =
   [hsx|
     <li class="p-2 hover:bg-gray-800 lg:block">
         <div>{name}</div>
