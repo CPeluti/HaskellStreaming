@@ -40,6 +40,7 @@ library
     , bytestring
     , directory
     , esqueleto
+    , fuzzyfind
     , http-types
     , ihp-hsx
     , lifted-base
@@ -67,11 +68,13 @@ executable server-exe
       Models
       ModelsJson
       RestApi
+      Utils
       Views.Common
       Views.Layouts
       Views.Pages.FileUploadPage
       Views.Pages.LoginPage
-      Views.Pages.MusicPlayerPage
+      Views.Pages.MusicPlayer.CurrentlyPlayingBar
+      Views.Pages.MusicPlayer.MusicPlayerPage
       Paths_server
   autogen-modules:
       Paths_server
@@ -85,6 +88,7 @@ executable server-exe
     , bytestring
     , directory
     , esqueleto
+    , fuzzyfind
     , http-types
     , ihp-hsx
     , lifted-base
@@ -123,6 +127,7 @@ test-suite server-test
     , bytestring
     , directory
     , esqueleto
+    , fuzzyfind
     , http-types
     , ihp-hsx
     , lifted-base

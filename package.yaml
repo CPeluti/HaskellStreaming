@@ -44,6 +44,8 @@ dependencies:
 - aeson
 - wai-extra
 - lifted-base
+# - fuzzy
+- fuzzyfind
 
 ghc-options:
 - -Wall

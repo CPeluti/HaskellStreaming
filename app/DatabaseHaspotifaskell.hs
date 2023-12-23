@@ -9,7 +9,14 @@
 
 
 
-module DatabaseHaspotifaskell where
+module DatabaseHaspotifaskell 
+    ( runDb
+    , User(..), Music(..), Playlist(..), Relation, migrateAll
+    , insertPlaylist, updatePlaylistName, deletePlaylist, selectPlaylistByAuthor, selectPlaylistByName, selectAllPlaylists
+    , insertUser, updateUserName, updateUserEmail, updateUserPassword, deleteUser, selectAllUsers
+    , insertMusic, updateMusicName, updateMusicFilePath, updateMusicAuthor, updateMusicReleaseDate, updateMusicAlbum, updateMusicFileSize, updateMusicLength, deleteMusic, selectMusicByAuthor, selectMusicByName, selectMusicByAlbum, selectMusicByRelesate, selectAllSongs
+    , insertRelation, deleteRelation, selectRelationByMusic, selectRelationByPlaylist
+    ) where
 
 import            Control.Monad.Trans.Resource
 import Control.Monad.Logger
