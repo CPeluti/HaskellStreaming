@@ -27,6 +27,7 @@ import Data.ByteString.Char8 as BC
 -- import Text.FuzzyFind (bestMatch, Alignment(..))
 import Text.FuzzyFind (bestMatch)
 import Data.Time
+import Database.Persist (Entity(..))
 
 timeFormat = "%Y-%-m-%-d"
 understandTime:: String -> UTCTime
@@ -115,10 +116,11 @@ streamingBD s =
           _ <- liftIO (writeBuilder (byteString aux))
           liftIO flush
 
-filterTracks :: ByteString -> [Music] -> [Music]
-filterTracks query tracks =
+
+filterTracks :: ByteString -> [Entity Music] -> [Entity Music]
+filterTracks query entityTracks =
   let queryString = BC.unpack query
-  in Prelude.filter (isFuzzyMatch queryString . musicName) tracks
+  in Prelude.filter (isFuzzyMatch queryString . musicName . entityVal) entityTracks
 
 isFuzzyMatch :: String -> String -> Bool
 isFuzzyMatch query trackName =

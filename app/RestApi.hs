@@ -75,7 +75,7 @@ import Control.Exception.Lifted
 --   Scotty.stream $ streamingBD $ generateStream absolutePath
 
 musicFolder = "musics/"
-restApi :: [Playlist] -> [Music] -> IO ()
+restApi :: [Playlist] -> [Entity Music] -> IO ()
 restApi playlists tracks = do
   scotty 3000 $ do
     middleware static
@@ -120,7 +120,8 @@ restApi playlists tracks = do
     get "/musicPage" $ do
       -- users <- liftIO $ runDb $ selectAllUsers
       -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
-      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks
+      dbTracks <- liftIO $ runDb selectAllSongs
+      Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists dbTracks
     
     post "/music" $ do
       fs <- files

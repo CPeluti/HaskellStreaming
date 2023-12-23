@@ -1,4 +1,3 @@
-
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 
@@ -9,14 +8,13 @@ import qualified Text.Blaze.Html as Html
 import qualified Views.Layouts as Layouts
 import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
 import DatabaseHaspotifaskell (Music(..), Playlist(..))
+import Database.Persist (Entity(..))
 import Data.Time.Format (formatTime, defaultTimeLocale)
 import Text.Printf (printf)
 import Data.Maybe (listToMaybe)
 
--- import qualified Views.Common as Common
-
-musicPlayerPage :: [Playlist] -> [Music] -> Html.Html
-musicPlayerPage dummyPlaylists dummyTracks =
+musicPlayerPage :: [Playlist] -> [Entity Music] -> Html.Html
+musicPlayerPage dummyPlaylists entityTracks =
   Layouts.mainLayout
     [hsx| 
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -39,21 +37,19 @@ musicPlayerPage dummyPlaylists dummyTracks =
         <div class="flex flex-col lg:flex-row h-screen bg-gray-900 text-white">
         {sidebar dummyPlaylists}
           <div class="flex flex-col flex-grow">
-              {mainContent dummyTracks}
-              {maybeCurrentlyPlayingBar (listToMaybe dummyTracks)}
+              {mainContent entityTracks}
+              {maybeCurrentlyPlayingBar (listToMaybe entityTracks)}
           </div>
         </div>
 |]
 
--- Function to display when there are no tracks playing
-maybeCurrentlyPlayingBar :: Maybe Music -> Html.Html
-maybeCurrentlyPlayingBar (Just track) = currentlyPlayingBar track
-maybeCurrentlyPlayingBar Nothing       = 
+maybeCurrentlyPlayingBar :: Maybe (Entity Music) -> Html.Html
+maybeCurrentlyPlayingBar (Just (Entity _ track)) = currentlyPlayingBar track
+maybeCurrentlyPlayingBar Nothing = 
   [hsx|
     <div class="flex items-center justify-center h-full">
         <div class="text-center p-10">
             <div class="mb-4">
-                <!-- Cartoon cat with headphones image -->
                 <img src="https://www.neonvibes.co.uk/cdn/shop/products/Nothing-to-see-hereneonvibes.co.ukLEDneonsignsMadeintheUK_2000x.jpg?v=1677846952" alt="No Music Cat" class="mx-auto" style="width: 200px; height: auto;"/>
             </div>
             <h2 class="text-xl font-semibold text-gray-300">Oops, no tunes here!</h2>
@@ -62,14 +58,13 @@ maybeCurrentlyPlayingBar Nothing       =
     </div>
   |]
 
-
-mainContent :: [Music] -> Html.Html
-mainContent tracks =
+mainContent :: [Entity Music] -> Html.Html
+mainContent entityTracks =
   [hsx|
     <div class="flex-grow overflow-y-auto">
         {albumCoverSection}
         {searchBarComponent}
-        {trackListTable tracks}
+        {trackListTable entityTracks}
     </div>
   |]
 
@@ -85,9 +80,7 @@ albumCoverSection :: Html.Html
 albumCoverSection =
   [hsx|
     <div class="p-8 flex flex-col lg:flex-row items-center bg-gradient-to-r from-indigo-500">
-        <!-- Album Cover -->
         <img src="/assets/imagine.jpeg" alt="Song cover" class="w-48 h-48 mr-8 mb-4 lg:mb-0 shadow-lg rounded-lg"/>
-        <!-- Playlist Info -->
         <div class="text-center lg:text-left">
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Playlist 1</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400">A selection of your favorite tracks</p>
@@ -98,8 +91,8 @@ albumCoverSection =
     </div>
   |]
 
-trackListTable :: [Music] -> Html.Html
-trackListTable tracks =
+trackListTable :: [Entity Music] -> Html.Html
+trackListTable entityTracks =
   [hsx|
     <div class="min-h-[30%] overflow-x-auto bg-gradient-to-b to-indigo-900 from-10% to-90%">
         <table id="track-list-table" class="w-full text-left border-collapse">
@@ -114,7 +107,7 @@ trackListTable tracks =
                 </tr>
             </thead>
             <tbody class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                {mapM_ renderTrack tracks}
+                {mapM_ renderTrack entityTracks}
             </tbody>
         </table>
     </div>
@@ -131,20 +124,17 @@ sidebar playlists =
     </div>
 |]
 
-
-
 renderPlaylist :: Playlist -> Html.Html
 renderPlaylist (Playlist name authorId) =
   [hsx|
     <li class="p-2 hover:bg-gray-800 lg:block">
         <div>{name}</div>
         <div class="text-xs text-gray-400">Created by {authorId}</div>
-       <!-- <div class="text-xs text-gray-400">Created by {userFirstName author} {userLastName author}</div> -->
     </li>
   |]
 
-renderTrack :: Music -> Html.Html
-renderTrack (Music filePath name author releaseDate album fileSize fileLength) =
+renderTrack :: Entity Music -> Html.Html
+renderTrack (Entity _ (Music filePath name author releaseDate album fileSize fileLength)) =
   let hxVals = "{\"filePath\": \"" ++ filePath ++ "\", \"name\": \"" ++ name ++ "\", \"author\": \"" ++ author ++ "\"}"
   in [hsx|
     <tr class="hover:bg-gray-800">
