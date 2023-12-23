@@ -60,20 +60,6 @@ import Utils (understandTime, baseHtml, dbData, componentButton, parseStart, par
 
 import Control.Exception.Lifted
 
--- streamMusic :: Music -> IO()
--- streamMusic m = do
---   filePath <- musicFilePath m
---   startRange <- parseStart <$> Scotty.header "range"
---   endRange <- parseEnd <$> Scotty.header "range"
---   absolutePath <- liftIO $ getAbsolutePath filePath
---   totalSize <- liftIO $ fileSize absolutePath
-
---   Scotty.status status206
---   Scotty.setHeader "Content-Type" "audio/mpeg"
---   Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
---   Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
---   Scotty.stream $ streamingBD $ generateStream absolutePath
-
 musicFolder = "musics/"
 restApi :: [Playlist] -> [Music] -> IO ()
 restApi playlists tracks = do
@@ -116,12 +102,8 @@ restApi playlists tracks = do
           Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
           Scotty.stream $ streamingBD $ generateStream absolutePath
         Nothing -> Scotty.status status404
-      -- liftIO $ print $ MusicName $ entityVal music
     get "/musicPage" $ do
-      -- users <- liftIO $ runDb $ selectAllUsers
-      -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
       Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks
-    
     post "/music" $ do
       fs <- files
 
@@ -147,7 +129,7 @@ restApi playlists tracks = do
       -- write on db
       _ <- liftIO $ runDb $ (insertMusic filePath song author (understandTime releaseDate :: UTCTime) album fSize length)
       --
-      Scotty.text "foi"
+      Scotty.redirect "/uploadPage"
       -- (music :: Music) <- jsonData
       -- uid <- liftIO $ runDb $ DB.insert music
       -- json $ Entity uid music
