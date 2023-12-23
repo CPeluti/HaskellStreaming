@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
 
-module Utils (baseHtml, dbData, componentButton, parseStart, parseEnd, getAbsolutePath, fileSize, generateRange, checkStart, parseInt, checkEnd, streamingBD, generateStream, filterTracks) where
+module Utils (understandTime, baseHtml, dbData, componentButton, parseStart, parseEnd, getAbsolutePath, fileSize, generateRange, checkStart, parseInt, checkEnd, streamingBD, generateStream, filterTracks) where
 
 import Control.Monad.Trans.Resource
 import Data.ByteString as B
@@ -26,6 +26,11 @@ import Text.Read (readMaybe)
 import Data.ByteString.Char8 as BC
 -- import Text.FuzzyFind (bestMatch, Alignment(..))
 import Text.FuzzyFind (bestMatch)
+import Data.Time
+
+timeFormat = "%Y-%-m-%-d"
+understandTime:: String -> UTCTime
+understandTime = parseTimeOrError True defaultTimeLocale timeFormat
 
 baseHtml :: (IHP.HSX.ToHtml.ToHtml a) => a -> Html
 baseHtml bodyContent =

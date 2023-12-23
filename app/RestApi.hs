@@ -45,12 +45,14 @@ import qualified Database.Persist.Sqlite as DB
 import           Models
 import           ModelsJson
 import           Data.Int
-import           Data.Time
 import           Data.Typeable
+
+import Data.Time
+
 
 
 import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
-import Utils (baseHtml, dbData, componentButton, parseStart, parseEnd, getAbsolutePath, fileSize, generateRange, checkStart, parseInt, checkEnd, streamingBD, generateStream, filterTracks)
+import Utils (understandTime, baseHtml, dbData, componentButton, parseStart, parseEnd, getAbsolutePath, fileSize, generateRange, checkStart, parseInt, checkEnd, streamingBD, generateStream, filterTracks)
 
 
 
@@ -93,9 +95,9 @@ restApi playlists tracks = do
       liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
       -- TODO: implement authentication
       Scotty.redirect "/musicPage"
+
     Scotty.get "/uploadPage" $ do
       Scotty.html $ renderHtml $ baseHtml fileUploadPage
-
 
     get "/music/:id" $ do
       (idValue :: Int64) <- Scotty.param "id"
@@ -143,7 +145,7 @@ restApi playlists tracks = do
       -- get filesize
       fSize <- liftIO $ fromIntegral <$> withFile filePath ReadMode hFileSize
       -- write on db
-      _ <- liftIO $ runDb $ (insertMusic filePath song author (read releaseDate :: UTCTime) album fSize length)
+      _ <- liftIO $ runDb $ (insertMusic filePath song author (understandTime releaseDate :: UTCTime) album fSize length)
       --
       Scotty.text "foi"
       -- (music :: Music) <- jsonData
