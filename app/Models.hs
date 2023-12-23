@@ -50,7 +50,6 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
     deriving Show
   Playlist
     name String
-    author UserId
     deriving Show
   Relation
     playlist PlaylistId

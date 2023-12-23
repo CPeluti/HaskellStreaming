@@ -116,12 +116,10 @@ sidebar playlists =
 
 
 renderPlaylist :: Playlist -> Html.Html
-renderPlaylist (Playlist name authorId) =
+renderPlaylist (Playlist name) =
   [hsx|
     <li class="p-2 hover:bg-gray-800 lg:block">
         <div>{name}</div>
-        <div class="text-xs text-gray-400">Created by {authorId}</div>
-       <!-- <div class="text-xs text-gray-400">Created by {userFirstName author} {userLastName author}</div> -->
     </li>
   |]
 

@@ -48,7 +48,7 @@ import           Data.Int
 import           Data.Typeable
 
 import Data.Time
-
+import Joins
 
 
 import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
@@ -104,6 +104,43 @@ restApi playlists tracks = do
         Nothing -> Scotty.status status404
     get "/musicPage" $ do
       Scotty.html $ renderHtml $ baseHtml $ musicPlayerPage playlists tracks
+    
+    -- post "/playlist/:id" $ do
+    --   (idPlaylist :: Int64) <- Scotty.param "id"
+    --   (idMusic :: Int64) <- Scotty.param "id_music"
+    --   _ <- liftIO $ runDb $ insertRelation (DB.toSqlKey idPlaylist) (DB.toSqlKey idMusic)
+    --   Scotty.text "foi"
+    -- post "/playlist" $ do
+    --   name <- Scotty.param "playlist_name"
+    --   _ <- liftIO $ runDb $ (insertPlaylist name)
+    --   Scotty.text "foi"
+    
+    -- get "/playlist/:id" $ do
+    --   (idValue :: Int64) <- Scotty.param "id"
+      -- (relations :: [Entity Relation]) <- liftIO $ runDb $ selectRelationByPlaylist $ DB.toSqlKey $ idValue
+      -- (musicIds :: [Int64]) <- evaluate $ Prelude.map (\(Entity _ key) -> (DB.fromSqlKey (relationMusic key) :: Int64)) relations
+      -- (musics :: [IO (Maybe Music)]) <- evaluate $ Prelude.map (\id -> runDb $ selectMusicByIdInt id) musicIds
+      -- _ <- liftIO $ mapM_ (\music ->  case music of
+      --     Just m -> print m
+      --     Nothing -> print "Nothing"  
+      --   ) musics
+      
+      -- musicKeys <- liftIO $ mapM_ (\(Entity _ relation) -> relationMusic relation) relations
+      -- musics <- liftIO $ mapM_ (\(Entity _ value) ->  runDb $ selectMusicById (MusicKey value)) musics
+      -- Scotty.text "foi"
+    -- get "/playlist" $ do 
+    --   (playlists :: [Entity Playlist]) <- liftIO $ runDb $ selectAllPlaylists
+    --   liftIO $ mapM_ (\(Entity _ playlist) -> putStrLn $ "Musica: " ++ show (playlistName playlist)) playlists
+    --   -- retornar componentes de playlists
+    --   Scotty.text "foi"
+    
+    -- get "/playlist/dropdown" $ do
+    --   (playlists :: [Entity Playlist]) <- liftIO $ runDb $ selectAllPlaylists
+    --   liftIO $ mapM_ (\(Entity _ playlist) -> putStrLn $ "Musica: " ++ show (playlistName playlist)) playlists
+    --   -- retornar componentes de dropdown de playlist para cadastrar uma musica
+    --   Scotty.text "foi"
+    
+    
     post "/music" $ do
       fs <- files
 
