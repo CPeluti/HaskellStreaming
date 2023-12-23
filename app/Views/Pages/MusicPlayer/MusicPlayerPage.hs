@@ -82,7 +82,7 @@ albumCoverSection =
     <div class="p-8 flex flex-col lg:flex-row items-center bg-gradient-to-r from-indigo-500">
         <img src="/assets/haspotifaskell.png" alt="Song cover" class="w-48 h-48 mr-8 mb-4 lg:mb-0 shadow-lg rounded-lg"/>
         <div class="text-center lg:text-left">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Playlist 1</h2>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Haspotifaskell</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400">A selection of your favorite tracks</p>
             <div class="mt-4">
                 <!-- {playButton "player"} -->
