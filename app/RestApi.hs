@@ -18,7 +18,7 @@ import            Text.Blaze.Html5 as H
 import qualified  Data.Text.Lazy as T
 import qualified  Data.Text.Encoding
 
-import            Network.HTTP.Types (status206)
+import            Network.HTTP.Types (status206, status404)
 import            Text.Read (readMaybe)
 import            Control.Monad.Trans.Resource
 import            Network.Wai
@@ -29,6 +29,7 @@ import            Data.ByteString as B
 import qualified  Data.ByteString.Char8 as BSL
 import            Streaming.ByteString  as BSS (toChunks, readFile)
 import            System.Directory (getCurrentDirectory)
+import            System.IO (IOMode(..), hFileSize, withFile)
 import            Network.Wai.Middleware.Static (static)
 
 import            Views.Pages.LoginPage (loginPage)
@@ -44,16 +45,34 @@ import qualified Database.Persist.Sqlite as DB
 import           Models
 import           ModelsJson
 import           Data.Int
-import           Data.Time
+import           Data.Typeable
+
+import Data.Time
+
+
 
 import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
-import Utils (baseHtml, dbData, componentButton, parseStart, parseEnd, getAbsolutePath, fPathRelative, fileSize, generateRange, checkStart, parseInt, checkEnd, streamingBD, generateStream, filterTracks)
+import Utils (understandTime, baseHtml, dbData, componentButton, parseStart, parseEnd, getAbsolutePath, fileSize, generateRange, checkStart, parseInt, checkEnd, streamingBD, generateStream, filterTracks)
 
 
 
 
 
 import Control.Exception.Lifted
+
+-- streamMusic :: Music -> IO()
+-- streamMusic m = do
+--   filePath <- musicFilePath m
+--   startRange <- parseStart <$> Scotty.header "range"
+--   endRange <- parseEnd <$> Scotty.header "range"
+--   absolutePath <- liftIO $ getAbsolutePath filePath
+--   totalSize <- liftIO $ fileSize absolutePath
+
+--   Scotty.status status206
+--   Scotty.setHeader "Content-Type" "audio/mpeg"
+--   Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
+--   Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
+--   Scotty.stream $ streamingBD $ generateStream absolutePath
 
 musicFolder = "musics/"
 restApi :: [Playlist] -> [Music] -> IO ()
@@ -76,25 +95,28 @@ restApi playlists tracks = do
       liftIO $ putStrLn $ "Username: " ++ username ++ ", Password: " ++ password
       -- TODO: implement authentication
       Scotty.redirect "/musicPage"
+
     Scotty.get "/uploadPage" $ do
       Scotty.html $ renderHtml $ baseHtml fileUploadPage
-
 
     get "/music/:id" $ do
       (idValue :: Int64) <- Scotty.param "id"
       (music :: Maybe Music) <- liftIO $ runDb $ DB.get $ DB.toSqlKey $ idValue
-      liftIO $ print music
-      Scotty.text "foi"
-      -- startRange <- parseStart <$> Scotty.header "range"
-      -- endRange <- parseEnd <$> Scotty.header "range"
-      -- absolutePath <- liftIO $ getAbsolutePath fPathRelative
-      -- totalSize <- liftIO $ fileSize absolutePath
-
-      -- Scotty.status status206
-      -- Scotty.setHeader "Content-Type" "audio/mpeg"
-      -- Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
-      -- Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
-      -- Scotty.stream $ streamingBD $ generateStream absolutePath
+      case music of
+        Just (m) -> do
+          -- retira aspas colocadas pelo banco de dados
+          filePath <- evaluate $ Prelude.filter (/='"') $ musicFilePath m
+          startRange <- parseStart <$> Scotty.header "range"
+          endRange <- parseEnd <$> Scotty.header "range"
+          absolutePath <- liftIO $ getAbsolutePath filePath
+          totalSize <- liftIO $ fileSize absolutePath
+          Scotty.status status206
+          Scotty.setHeader "Content-Type" "audio/mpeg"
+          Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
+          Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
+          Scotty.stream $ streamingBD $ generateStream absolutePath
+        Nothing -> Scotty.status status404
+      -- liftIO $ print $ MusicName $ entityVal music
     get "/musicPage" $ do
       -- users <- liftIO $ runDb $ selectAllUsers
       -- liftIO $ mapM_ (\(Entity _ user) -> putStrLn $ "Nome: " ++ userFirstName user) users
@@ -102,11 +124,29 @@ restApi playlists tracks = do
     
     post "/music" $ do
       fs <- files
-      song <- liftIO $ runDb $ (DB.selectList [] [DB.Desc MusicId, DB.LimitTo 1]) 
-      name <- evaluate ((DB.fromSqlKey . DB.entityKey $ (Prelude.head song) :: Int64) + 1)
+
+      (song :: String) <- Scotty.param "song_name"
+      (author :: String)  <- Scotty.param "author_name"
+      (album :: String) <- Scotty.param "album_name"
+      (releaseDate :: String) <- Scotty.param "release_date"
+      (length :: Int) <- Scotty.param "length"
+      -- use bd key as name on drive
+      lastSong <- liftIO $ runDb $ (DB.selectList [] [DB.Desc MusicId, DB.LimitTo 1]) 
+      name <- case lastSong of
+        [] -> evaluate 1
+        [x] -> evaluate ((DB.fromSqlKey . DB.entityKey $ x :: Int64) + 1)
+        (x:xs) -> evaluate ((DB.fromSqlKey . DB.entityKey $ x :: Int64) + 1)
+      filePath <- evaluate $ musicFolder ++ (show name)
+      --
+      -- write on drive
       let fs1 = [ (musicName, fileContent file) | (musicName, file)<- fs]
-      liftIO $ sequence_ [BLazy.writeFile (musicFolder ++ (show name)) fileContent | (_, fileContent) <- fs1]
-    
+      _ <- liftIO $ sequence_ [BLazy.writeFile filePath fileContent | (_, fileContent) <- fs1]
+      --
+      -- get filesize
+      fSize <- liftIO $ fromIntegral <$> withFile filePath ReadMode hFileSize
+      -- write on db
+      _ <- liftIO $ runDb $ (insertMusic filePath song author (understandTime releaseDate :: UTCTime) album fSize length)
+      --
       Scotty.text "foi"
       -- (music :: Music) <- jsonData
       -- uid <- liftIO $ runDb $ DB.insert music
