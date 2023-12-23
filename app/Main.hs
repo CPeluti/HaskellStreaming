@@ -15,50 +15,22 @@
 
 module Main (main) where
 
-import Models
+import Models ()
 import Control.Monad.IO.Class
-import Control.Monad.Logger (NoLoggingT)
-import Control.Monad.Trans.Resource (ResourceT)
 -- import Data.ByteString
-import Data.Time
 -- import qualified Database.Esqueleto as E
 -- import Database.Persist
 import Database.Persist.Sqlite
 -- import Database.Persist.TH
 import DatabaseHaspotifaskell
 import RestApi (restApi)
-import           Database.Persist
-import           Database.Persist.Sqlite
-import           Database.Persist.TH
-import           Data.ByteString
-import           Data.Time
-import           Control.Monad.IO.Class
-import           DatabaseHaspotifaskell
 
-import Models
-
-createDummyData :: SqlPersistT (ResourceT (NoLoggingT IO)) ([Playlist], [Music])
-createDummyData = do
-  currentTime <- liftIO getCurrentTime
-  let dummyPlaylists =
-        [ Playlist "Playlist 1",
-          Playlist "Playlist 2",
-          Playlist "Playlist 3"
-        ]
-  let dummyTracks = [ 
-          -- Music "./assets/virtual_insanity.mp3" "Virtual Insanity" "Jamiroquai" currentTime "Travelling Without Moving" 5000 329,
-          -- Music "./assets/paint_it_black.mp3" "Paint It Black" "The Rolling Stones" currentTime "Aftermath" 4000 202,
-          -- Music "./assets/dont_stop_me_now.mp3" "Don't Stop Me Now" "Queen" currentTime "Jazz" 6000 210
-          -- Music "./assets/stairway_to_heaven.mp3" "Stairway to Heaven" "Led Zeppelin" currentTime "Led Zeppelin IV" 5500 482 currentTime,
-          -- Music "./assets/bohemian_rhapsody.mp3" "Bohemian Rhapsody" "Queen" currentTime "A Night at the Opera" 6200 354 currentTime
-        ]
-  return (dummyPlaylists, dummyTracks)
 
 main :: IO ()
 main = do
   runDb $ runMigration migrateAll
 
-  liftIO $ restApi
+  liftIO restApi
 
   -- idUser <- insertUser "teste@gmail.com" "teste" "t" "senha"
   -- idUser2 <- insertUser "testeteste@gmail.com" "testeteste" "tt" "senhaa"

@@ -29,7 +29,9 @@ import Text.FuzzyFind (bestMatch)
 import Data.Time
 import Database.Persist (Entity(..))
 
+timeFormat :: String
 timeFormat = "%Y-%-m-%-d"
+
 understandTime:: String -> UTCTime
 understandTime = parseTimeOrError True defaultTimeLocale timeFormat
 

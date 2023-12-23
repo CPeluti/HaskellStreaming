@@ -3,26 +3,27 @@
 {-# LANGUAGE RecordWildCards   #-}
 
 {-# OPTIONS_GHC -fwarn-unused-matches -fwarn-unused-binds -fwarn-unused-imports #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
+{-# OPTIONS_GHC -Wno-unused-matches #-}
 
 module ModelsJson where
 
-import           Control.Applicative
 import           Control.Monad
 import           Data.Aeson
 import           Database.Persist
 import           Models
 
 instance ToJSON (Entity Music) where
-    toJSON (Entity uid (c@Music{..})) =
+    toJSON (Entity uid c@Music{..}) =
         object
         [ "id" .= uid
-        , "filePath" .= musicFilePath 
-        , "name" .= musicName 
-        , "author" .= musicAuthor 
-        , "releaseDate" .= musicReleaseDate 
-        , "album" .= musicAlbum 
-        , "fileSize" .= musicFileSize 
-        , "length" .= musicLength 
+        , "filePath" .= musicFilePath
+        , "name" .= musicName
+        , "author" .= musicAuthor
+        , "releaseDate" .= musicReleaseDate
+        , "album" .= musicAlbum
+        , "fileSize" .= musicFileSize
+        , "length" .= musicLength
         ]
 
 instance FromJSON Music where

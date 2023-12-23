@@ -1,11 +1,11 @@
 {-# LANGUAGE FlexibleContexts           #-}
 {-# LANGUAGE GADTs                      #-}
 {-# LANGUAGE OverloadedStrings          #-}
-{-# LANGUAGE QuasiQuotes                #-}
-{-# LANGUAGE TemplateHaskell            #-}
+-- {-# LANGUAGE QuasiQuotes                #-}
+-- {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE TypeOperators #-}
+-- {-# LANGUAGE TypeOperators #-}
 
 
 
@@ -22,7 +22,6 @@ import            Control.Monad.Trans.Resource
 import Control.Monad.Logger
 import           Database.Persist
 import           Database.Persist.Sqlite
-import           Database.Persist.TH
 import           Data.Time
 import           Data.Int
 import           Control.Monad.IO.Class
@@ -56,11 +55,11 @@ selectAllPlaylists :: (MonadIO m) => SqlPersistT m [Entity Playlist]
 selectAllPlaylists = do
   selectList [] [Asc PlaylistId]
 
-selectPlaylistById :: (MonadIO m) => Key Playlist -> SqlPersistT m (Maybe Playlist)
-selectPlaylistById = get
+-- selectPlaylistById :: (MonadIO m) => Key Playlist -> SqlPersistT m (Maybe Playlist)
+-- selectPlaylistById = get
 
-selectPlaylistByIdInt :: (MonadIO m) => Int64 -> SqlPersistT m (Maybe Playlist)
-selectPlaylistByIdInt idValue = get $ toSqlKey idValue
+-- selectPlaylistByIdInt :: (MonadIO m) => Int64 -> SqlPersistT m (Maybe Playlist)
+-- selectPlaylistByIdInt idValue = get $ toSqlKey idValue
 
 -- FUNCOES USER
 insertUser :: (MonadIO m) => String -> String -> String -> String -> SqlPersistT m (Key User)
@@ -83,11 +82,11 @@ selectAllUsers :: (MonadIO m) => SqlPersistT m [Entity User]
 selectAllUsers = do
   selectList [] [Asc UserId]
 
-selectUserById :: (MonadIO m) => Key User -> SqlPersistT m (Maybe User)
-selectUserById = get
+-- selectUserById :: (MonadIO m) => Key User -> SqlPersistT m (Maybe User)
+-- selectUserById = get
 
-selectUserByIdInt :: (MonadIO m) => Int64 -> SqlPersistT m (Maybe User)
-selectUserByIdInt idValue = get $ toSqlKey idValue
+-- selectUserByIdInt :: (MonadIO m) => Int64 -> SqlPersistT m (Maybe User)
+-- selectUserByIdInt idValue = get $ toSqlKey idValue
 
 -- FUNCOES MUSICAS
 insertMusic :: (MonadIO m) => String -> String -> String -> UTCTime -> String -> Int -> Int -> SqlPersistT m (Key Music)

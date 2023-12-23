@@ -14,20 +14,11 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
+{-# LANGUAGE TypeOperators #-}
 
 
 module Models where
-
-import Control.Applicative
-import Control.Monad
-
-import Data.Aeson
-
-import qualified Data.Text as T
 import           Data.Time
-import           Data.ByteString
-
-import Database.Persist
 import Database.Persist.TH
 
 
