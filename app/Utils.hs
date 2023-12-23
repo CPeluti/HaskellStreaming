@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
 
-module Utils (baseHtml, dbData, componentButton, parseStart, parseEnd, getAbsolutePath, fPathRelative, fileSize, generateRange, checkStart, parseInt, checkEnd, streamingBD, generateStream, filterTracks) where
+module Utils (baseHtml, dbData, componentButton, parseStart, parseEnd, getAbsolutePath, fileSize, generateRange, checkStart, parseInt, checkEnd, streamingBD, generateStream, filterTracks) where
 
 import Control.Monad.Trans.Resource
 import Data.ByteString as B
@@ -54,9 +54,9 @@ componentButton = button
 dbData :: [Integer]
 dbData = [1 .. 4]
 
-fPathRelative :: FilePath
+-- fPathRelative :: FilePath
 -- fPathRelative = "virtual_insanity_jamiroquai.mp3"
-fPathRelative = "src/eBG7P-K-r1Y_160.mp3"
+-- fPathRelative = "src/eBG7P-K-r1Y_160.mp3"
 
 -- Function to get the absolute path
 getAbsolutePath :: FilePath -> IO FilePath
