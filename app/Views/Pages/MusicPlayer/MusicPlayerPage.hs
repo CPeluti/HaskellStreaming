@@ -127,6 +127,10 @@ sidebar entityPlaylists =
 -- Now takes an Entity Playlist and extracts the Playlist from it
 renderPlaylist :: Entity Playlist -> Html.Html
 renderPlaylist (Entity _ (Playlist name authorId)) =
+
+
+renderPlaylist :: Playlist -> Html.Html
+renderPlaylist (Playlist name) =
   [hsx|
     <li class="p-2 hover:bg-gray-800 lg:block">
         <div>{name}</div>

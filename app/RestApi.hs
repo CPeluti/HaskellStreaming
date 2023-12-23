@@ -48,7 +48,7 @@ import           Data.Int
 import           Data.Typeable
 
 import Data.Time
-
+import Joins
 
 
 import Views.Pages.MusicPlayer.CurrentlyPlayingBar (currentlyPlayingBar)
@@ -59,20 +59,6 @@ import Utils (understandTime, baseHtml, dbData, componentButton, parseStart, par
 
 
 import Control.Exception.Lifted
-
--- streamMusic :: Music -> IO()
--- streamMusic m = do
---   filePath <- musicFilePath m
---   startRange <- parseStart <$> Scotty.header "range"
---   endRange <- parseEnd <$> Scotty.header "range"
---   absolutePath <- liftIO $ getAbsolutePath filePath
---   totalSize <- liftIO $ fileSize absolutePath
-
---   Scotty.status status206
---   Scotty.setHeader "Content-Type" "audio/mpeg"
---   Scotty.setHeader "Content-Length" (T.pack $ show totalSize)
---   Scotty.setHeader "Content-Range" (T.pack $ generateRange (checkStart (parseInt $ T.unpack startRange)) (checkEnd (parseInt (T.unpack endRange)) totalSize))
---   Scotty.stream $ streamingBD $ generateStream absolutePath
 
 musicFolder = "musics/"
 restApi :: IO ()
@@ -114,6 +100,42 @@ restApi  = do
         Nothing -> Scotty.status status404
       -- liftIO $ print $ MusicName $ entityVal music
     
+    -- post "/playlist/:id" $ do
+    --   (idPlaylist :: Int64) <- Scotty.param "id"
+    --   (idMusic :: Int64) <- Scotty.param "id_music"
+    --   _ <- liftIO $ runDb $ insertRelation (DB.toSqlKey idPlaylist) (DB.toSqlKey idMusic)
+    --   Scotty.text "foi"
+    -- post "/playlist" $ do
+    --   name <- Scotty.param "playlist_name"
+    --   _ <- liftIO $ runDb $ (insertPlaylist name)
+    --   Scotty.text "foi"
+    
+    -- get "/playlist/:id" $ do
+    --   (idValue :: Int64) <- Scotty.param "id"
+      -- (relations :: [Entity Relation]) <- liftIO $ runDb $ selectRelationByPlaylist $ DB.toSqlKey $ idValue
+      -- (musicIds :: [Int64]) <- evaluate $ Prelude.map (\(Entity _ key) -> (DB.fromSqlKey (relationMusic key) :: Int64)) relations
+      -- (musics :: [IO (Maybe Music)]) <- evaluate $ Prelude.map (\id -> runDb $ selectMusicByIdInt id) musicIds
+      -- _ <- liftIO $ mapM_ (\music ->  case music of
+      --     Just m -> print m
+      --     Nothing -> print "Nothing"  
+      --   ) musics
+      
+      -- musicKeys <- liftIO $ mapM_ (\(Entity _ relation) -> relationMusic relation) relations
+      -- musics <- liftIO $ mapM_ (\(Entity _ value) ->  runDb $ selectMusicById (MusicKey value)) musics
+      -- Scotty.text "foi"
+    -- get "/playlist" $ do 
+    --   (playlists :: [Entity Playlist]) <- liftIO $ runDb $ selectAllPlaylists
+    --   liftIO $ mapM_ (\(Entity _ playlist) -> putStrLn $ "Musica: " ++ show (playlistName playlist)) playlists
+    --   -- retornar componentes de playlists
+    --   Scotty.text "foi"
+    
+    -- get "/playlist/dropdown" $ do
+    --   (playlists :: [Entity Playlist]) <- liftIO $ runDb $ selectAllPlaylists
+    --   liftIO $ mapM_ (\(Entity _ playlist) -> putStrLn $ "Musica: " ++ show (playlistName playlist)) playlists
+    --   -- retornar componentes de dropdown de playlist para cadastrar uma musica
+    --   Scotty.text "foi"
+    
+    
     post "/music" $ do
       fs <- files
 
@@ -139,7 +161,7 @@ restApi  = do
       -- write on db
       _ <- liftIO $ runDb $ (insertMusic filePath song author (understandTime releaseDate :: UTCTime) album fSize length)
       --
-      Scotty.text "foi"
+      Scotty.redirect "/uploadPage"
       -- (music :: Music) <- jsonData
       -- uid <- liftIO $ runDb $ DB.insert music
       -- json $ Entity uid music

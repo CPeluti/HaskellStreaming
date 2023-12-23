@@ -40,11 +40,10 @@ import Models
 createDummyData :: SqlPersistT (ResourceT (NoLoggingT IO)) ([Playlist], [Music])
 createDummyData = do
   currentTime <- liftIO getCurrentTime
-  mockUserId <- insertUser "example@email.com" "FirstName" "LastName" "passwordHash"
   let dummyPlaylists =
-        [ Playlist "Playlist 1" mockUserId,
-          Playlist "Playlist 2" mockUserId,
-          Playlist "Playlist 3" mockUserId
+        [ Playlist "Playlist 1",
+          Playlist "Playlist 2",
+          Playlist "Playlist 3"
         ]
   let dummyTracks = [ 
           -- Music "./assets/virtual_insanity.mp3" "Virtual Insanity" "Jamiroquai" currentTime "Travelling Without Moving" 5000 329,

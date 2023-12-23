@@ -12,10 +12,10 @@
 module DatabaseHaspotifaskell 
     ( runDb
     , User(..), Music(..), Playlist(..), Relation, migrateAll
-    , insertPlaylist, updatePlaylistName, deletePlaylist, selectPlaylistByAuthor, selectPlaylistByName, selectAllPlaylists
+    , insertPlaylist, updatePlaylistName, deletePlaylist, selectPlaylistByName, selectAllPlaylists
     , insertUser, updateUserName, updateUserEmail, updateUserPassword, deleteUser, selectAllUsers
     , insertMusic, updateMusicName, updateMusicFilePath, updateMusicAuthor, updateMusicReleaseDate, updateMusicAlbum, updateMusicFileSize, updateMusicLength, deleteMusic, selectMusicByAuthor, selectMusicByName, selectMusicByAlbum, selectMusicByRelesate, selectAllSongs
-    , insertRelation, deleteRelation, selectRelationByMusic, selectRelationByPlaylist
+    , insertRelation, deleteRelation, selectRelationByMusic, selectRelationByPlaylist, selectMusicById, selectMusicByIdInt
     ) where
 
 import            Control.Monad.Trans.Resource
@@ -37,9 +37,9 @@ runDb = runNoLoggingT
       . withSqliteConn "dev.sqlite3"
       . runSqlConn
 
-insertPlaylist :: (MonadIO m) => String -> Key User -> SqlPersistT m (Key Playlist)
-insertPlaylist pName idUser = do
-  insert $ Playlist pName idUser
+insertPlaylist :: (MonadIO m) => String -> SqlPersistT m (Key Playlist)
+insertPlaylist pName = do
+  insert $ Playlist pName
 
 updatePlaylistName :: (MonadIO m) => Key Playlist -> String -> SqlPersistT m ()
 updatePlaylistName playlistId updatedName = update playlistId [PlaylistName =. updatedName]
@@ -48,9 +48,6 @@ updatePlaylistName playlistId updatedName = update playlistId [PlaylistName =. u
 
 deletePlaylist :: (MonadIO m) => Key Playlist -> SqlPersistT m ()
 deletePlaylist = delete
-
-selectPlaylistByAuthor :: (MonadIO m) => Key User -> SqlPersistT m [Entity Playlist]
-selectPlaylistByAuthor wantedAuthor = selectList [PlaylistAuthor ==. wantedAuthor] []
 
 selectPlaylistByName :: (MonadIO m) => String -> SqlPersistT m [Entity Playlist]
 selectPlaylistByName wantedName = selectList [PlaylistName ==. wantedName] []
