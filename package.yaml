@@ -33,13 +33,19 @@ dependencies:
 - resourcet
 - wai
 - http-types
-- beam-core
-- beam-postgres
-- beam-migrate
-- postgresql-simple
 - time
 - directory
 - wai-middleware-static
+- esqueleto
+- persistent
+- persistent-sqlite
+- persistent-template
+- monad-logger
+- aeson
+- wai-extra
+- lifted-base
+# - fuzzy
+- fuzzyfind
 
 ghc-options:
 - -Wall
