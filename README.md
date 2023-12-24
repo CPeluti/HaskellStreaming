@@ -1,12 +1,12 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/hiWa6Cqc)
 
 # Haspotifaskell
-## API de streaming de música escrita em Haskell
-## Principais features
+## API de streaming de música escrita em Haskell 🎶
+## Principais features 
 1. Streaming de mp3.
 2. Interface web para reprodução de músicas
 3. Armazenamendo de meta-dados usando sqlite
-4. Escrito em Haskell -- inserir emoji de fire aqui --
+4. Escrito em Haskell 🔥😎🔥
 
 ## Instalação
 ### Dependencias
@@ -39,6 +39,6 @@ IMPORTANTE: O campo length é o tamanho da música em segundos!
 Basta clicar no botão de play da música desejada, disponível na rota `/`
 
 ## Contribuições
-@CaioPeluti - Streaming, banco de dados e API
-@AnaJordao - Streaming e banco de dados
-@luccahuguet - HTMX e API
+[CaioPeluti](https://github.com/CPeluti) - Streaming, banco de dados e API
+[AnaJordao](https://github.com/AnaJordao) - Streaming e banco de dados
+[luccahuguet](https://github.com/luccahuguet) - HTMX e API
