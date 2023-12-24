@@ -40,5 +40,7 @@ Basta clicar no botão de play da música desejada, disponível na rota `/`
 
 ## Contribuições
 [CaioPeluti](https://github.com/CPeluti) - Streaming, banco de dados e API
+
 [AnaJordao](https://github.com/AnaJordao) - Streaming e banco de dados
+
 [luccahuguet](https://github.com/luccahuguet) - HTMX e API
