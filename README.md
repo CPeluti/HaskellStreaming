@@ -8,7 +8,7 @@
 3. Armazenamendo de meta-dados usando sqlite
 4. Escrito em Haskell 🔥😎🔥
 
-## [Apresentação do projeto](https://youtu.be/5d6j80Eb98w)
+## [Video de Apresentação do Projeto](https://youtu.be/5d6j80Eb98w) 
 
 ## Instalação
 ### Dependencias
